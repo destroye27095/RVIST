@@ -39,6 +39,13 @@
             android:exported="false"
             android:screenOrientation="portrait" />
 
+        <!-- About Activity -->
+        <activity
+            android:name=".activities.AboutActivity"
+            android:exported="false"
+            android:label="@string/about_rvnp_title"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

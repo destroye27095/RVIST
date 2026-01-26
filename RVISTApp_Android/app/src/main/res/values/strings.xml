@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">RVIST@2026</string>
+    <string name="about_rvnp_title">About RVNP</string>
+    <string name="about_history_title">Historical Background</string>
+    <string name="about_history_content">Established in 1979 through a community-based harambee initiative, RVIST (now RVNP) was founded to equip youth with technical skills. It has grown from 200 students to over 12,000 today.</string>
+    <string name="about_leadership_title">Institutional Leadership</string>
+    <string name="about_principal">Principal: Mr. Sammy Chemoiwa</string>
+    <string name="about_chair">BoM Chair: Mr. Harun K. Bomet</string>
+    <string name="about_motto">Motto: Training for Self-Reliance</string>
+    <string name="about_why_title">Why Choose RVNP?</string>
+    <string name="about_why_content">1. National Recognition\n2. Competency-Based Training (CBET)\n3. Industry Linkages & Attachments\n4. Modern Facilities\n5. Affordable Public Education</string>
+    <string name="about_campuses_title">Campus Network</string>
+    <string name="about_campuses_list">Main Campus (Nakuru), Town Campus, Kericho Campus, Kuresoi Campus</string>
+    <string name="about_theme_title">Strategic Theme</string>
+    <string name="about_theme_content">"Technology for Industrialization"</string>
     <string name="app_subtitle">Smart Management System</string>
     
     <!-- Login Screen -->
