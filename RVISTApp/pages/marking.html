@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RVIST@2026 | Marking & Results Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .search-results-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid var(--accent);
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            z-index: 1000;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .search-item {
+            padding: 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .search-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+            padding-left: 1.5rem;
+        }
+
+        .marking-table input {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            width: 65px;
+            text-align: center;
+            border-radius: 6px;
+            padding: 4px;
+            font-family: 'Space Mono', monospace;
+            transition: border-color 0.3s;
+        }
+
+        .marking-table input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .perf-badge {
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .timetable-slot {
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent);
+            background: rgba(255,255,255,0.02);
+            transition: transform 0.3s;
+        }
+
+        .timetable-slot:hover {
+            transform: scale(1.02);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .ls-2 { letter-spacing: 2px; }
+        .x-small { font-size: 0.7rem; }
+    </style>
+</head>
+
+<body>
+    <canvas id="networkCanvas"></canvas>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar glass-panel">
+            <div class="brand">
+                <h2 class="text-accent">RVIST<span style="color: white; font-weight: 300;">@2026</span></h2>
+                <p class="text-muted" style="font-size: 0.8rem;">Smart Management System</p>
+            </div>
+
+            <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <a href="../index.html" class="nav-link">
+                    <i class="ph ph-squares-four"></i> Dashboard
+                </a>
+                <a href="students.html" class="nav-link">
+                    <i class="ph ph-student"></i> Students
+                </a>
+                <a href="communications.html" class="nav-link">
+                    <i class="ph ph-broadcast"></i> Comms Hub
+                </a>
+                <a href="marking.html" class="nav-link active">
+                    <i class="ph ph-exam"></i> Marking & Exams
+                </a>
+                <a href="fees.html" class="nav-link">
+                    <i class="ph ph-bank"></i> Fees Portal
+                </a>
+                <a href="announcements.html" class="nav-link">
+                    <i class="ph ph-megaphone"></i> Announcements
+                </a>
+            </nav>
+
+            <div style="margin-top: auto;">
+                <a href="login.html" class="nav-link text-danger mb-3" 
+                    onclick="localStorage.removeItem('rvist_user_role')">
+                    <i class="ph ph-sign-out"></i> Log Out
+                </a>
+                <div class="user-profile glass-panel" style="padding: 1rem; display: flex; align-items: center; gap: 1rem;">
+                    <div id="userAvatar" style="width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--bg-dark);">P</div>
+                    <div>
+                        <p id="userName" style="font-weight: 600; font-size: 0.9rem; margin: 0;">Principal Office</p>
+                        <p id="userRole" class="text-muted" style="font-size: 0.75rem; margin: 0;">Admin Access</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="mb-5">
+                <div class="row align-items-end g-4">
+                    <div class="col-lg-6">
+                        <h1 class="text-uppercase" style="letter-spacing: 4px;">Results & <span class="text-accent">Moderation</span></h1>
+                        <p class="text-muted">Academic grading, cross-departmental analysis, and global student lookup.</p>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="position-relative">
+                            <div class="glass-panel p-3 d-flex align-items-center gap-3" style="border-radius: 12px; border-color: rgba(212, 175, 55, 0.3);">
+                                <i class="ph ph-users-three text-accent" style="font-size: 1.5rem;"></i>
+                                <input type="text" id="globalLookup" class="w-100 bg-transparent border-0 text-white outline-none" 
+                                    placeholder="Search student by Name, ID, or Multi-Attribute..." style="outline: none; font-size: 1rem;">
+                                <kbd class="bg-dark border border-secondary text-muted small px-2">ALT+S</kbd>
+                            </div>
+                            <div id="lookupDropdown" class="search-results-dropdown"></div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="row g-4">
+                <!-- Exam Moderation & Marking -->
+                <div class="col-lg-8">
+                    <section class="glass-panel p-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="text-uppercase small ls-2 text-accent mb-0">Academic Entry Matrix</h5>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm glass-panel border-secondary border-opacity-25" onclick="simulateExcelUpload()">
+                                    <i class="ph ph-file-spreadsheet me-1"></i> IMPORT SPREADSHEET
+                                </button>
+                                <button class="btn btn-sm btn-primary px-3" onclick="calculateClassMean()">
+                                    <i class="ph ph-lightning me-1"></i> SYNC MEAN
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="data-table marking-table">
+                                <thead>
+                                    <tr>
+                                        <th class="ps-2">STUDENT IDENTITY</th>
+                                        <th>COHORT</th>
+                                        <th class="text-center">CAT (30)</th>
+                                        <th class="text-center">FINALS (70)</th>
+                                        <th class="text-center">AGGREGATE</th>
+                                        <th class="text-center">GRADE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="markingTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="analysisResult" class="mt-4 p-4 glass-panel d-none" style="background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.3);">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div class="bg-success bg-opacity-20 p-2 rounded">
+                                    <i class="ph ph-trend-up text-success h4 mb-0"></i>
+                                </div>
+                                <h5 class="text-success mb-0 fw-bold">Statistical Moderation Complete</h5>
+                            </div>
+                            <div class="row g-4">
+                                <div class="col-sm-4">
+                                    <p class="x-small text-muted text-uppercase ls-2 mb-1">Class Mean</p>
+                                    <h3 id="meanScore" class="mb-0 text-white">0</h3>
+                                </div>
+                                <div class="col-sm-4">
+                                    <p class="x-small text-muted text-uppercase ls-2 mb-1">Pass Ratio</p>
+                                    <h3 id="passRate" class="mb-0 text-white">0%</h3>
+                                </div>
+                                <div class="col-sm-4">
+                                    <p class="x-small text-muted text-uppercase ls-2 mb-1">Quality Level</p>
+                                    <span class="badge bg-success py-2 px-3">OPTIMAL PERFORMANCE</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Timetable & Quick Stats -->
+                <div class="col-lg-4">
+                    <section class="glass-panel p-4 mb-4">
+                        <h5 class="text-uppercase small ls-2 text-accent mb-4">Transmission Schedule</h5>
+                        <div class="timetable-slot glass-panel">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="text-accent x-small fw-bold">LIVE SESSION</span>
+                                <span class="text-success x-small fw-bold"><i class="ph ph-broadcast pulse"></i> TRANSMITTING</span>
+                            </div>
+                            <div class="fw-bold text-white mb-1">CYBER SECURITY - CSE422</div>
+                            <div class="text-muted small"><i class="ph ph-map-pin"></i> ADVANCED LAB - PROF. KAMAU</div>
+                        </div>
+                        <div class="timetable-slot glass-panel">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="text-muted x-small fw-bold">UPCOMING (14:00)</span>
+                            </div>
+                            <div class="fw-bold text-white mb-1">ELECTRICAL MODULAR - EE301</div>
+                            <div class="text-muted small"><i class="ph ph-map-pin"></i> WORKSHOP B - MR. OCHIENG</div>
+                        </div>
+                    </section>
+
+                    <section class="glass-panel p-4">
+                        <h5 class="text-uppercase small ls-2 text-accent mb-4">Verification Integrity</h5>
+                        <div class="d-flex flex-column gap-4">
+                            <div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted x-small ls-1">MARKING PROGRESS</span>
+                                    <span class="fw-bold text-accent small">84%</span>
+                                </div>
+                                <div class="progress" style="height: 4px; background: rgba(255,255,255,0.05);">
+                                    <div class="progress-bar bg-accent" style="width: 84%"></div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between p-3 glass-panel" style="background: rgba(16, 185, 129, 0.05);">
+                                <div>
+                                    <p class="mb-0 x-small text-muted ls-1">SYSTEM STATUS</p>
+                                    <p class="mb-0 fw-bold text-success small">ENCRYPTED & VERIFIED</p>
+                                </div>
+                                <i class="ph ph-shield-check text-success h2 mb-0"></i>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Student Result/Info Modal -->
+    <div class="modal fade" id="resultModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content glass-panel" style="background: rgba(15, 23, 42, 0.98); border: 1px solid rgba(212, 175, 55, 0.5);">
+                <div class="modal-body p-5">
+                    <div class="text-center mb-5 border-bottom border-secondary border-opacity-25 pb-4">
+                        <h2 class="text-accent fw-bold text-uppercase ls-2 mb-1">RiftValley National Polytechnic</h2>
+                        <h5 class="text-white-50 text-uppercase x-small ls-2">Institutional Performance Dashboard</h5>
+                    </div>
+
+                    <div id="modalContent">
+                        <!-- Loaded by JS -->
+                    </div>
+
+                    <div class="mt-5 text-center d-print-none pt-4 border-top border-secondary border-opacity-10">
+                        <button class="btn btn-outline-secondary px-4 me-2" data-bs-dismiss="modal">CLOSE RESOURCE</button>
+                        <button class="btn btn-primary px-4" onclick="window.print()">
+                            <i class="ph ph-printer me-2"></i> EXPORT TO PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/network.js"></script>
+    <script>
+        let students = [];
+        
+        async function init() {
+            try {
+                const resp = await fetch('../data/students.json');
+                students = await resp.json();
+                renderMarkingTable();
+                setupLookup();
+                
+                // User Session
+                const userEmail = localStorage.getItem('rvist_user_email');
+                if (userEmail) {
+                    const name = userEmail.split('@')[0].split('.')[0];
+                    document.getElementById('userName').innerText = (name.toUpperCase()) + " OFFICE";
+                    document.getElementById('userAvatar').innerText = name.charAt(0).toUpperCase();
+                }
+            } catch (err) {
+                console.error("Initialization Failed", err);
+            }
+        }
+
+        function renderMarkingTable() {
+            const tbody = document.getElementById('markingTableBody');
+            tbody.innerHTML = students.map((s, index) => {
+                const cat = Math.floor(Math.random() * 5) + 24;
+                const exam = Math.floor(Math.random() * 20) + 45;
+                const total = cat + exam;
+                const grade = total >= 80 ? 'A' : total >= 70 ? 'B' : total >= 60 ? 'C' : 'D';
+                
+                return `
+                    <tr class="fade-in-words" style="animation-delay: ${index * 0.05}s">
+                        <td class="ps-2">
+                            <div class="fw-bold text-white small">${s.name.toUpperCase()}</div>
+                            <div class="text-muted x-small ls-1">${s.id}</div>
+                        </td>
+                        <td><span class="text-muted small">${s.course.split(' ')[0]}</span></td>
+                        <td class="text-center"><input type="number" value="${cat}" onchange="updateRow(this)"></td>
+                        <td class="text-center"><input type="number" value="${exam}" onchange="updateRow(this)"></td>
+                        <td class="text-center fw-bold total-val text-accent">${total}</td>
+                        <td class="text-center grade-val">
+                            <span class="perf-badge" style="background:${getGradeColor(grade)}">${grade}</span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function getGradeColor(g) {
+            return g === 'A' ? 'rgba(16, 185, 129, 0.2); color: #10b981;' : 
+                   g === 'B' ? 'rgba(59, 130, 246, 0.2); color: #3b82f6;' : 
+                   g === 'C' ? 'rgba(212, 175, 55, 0.2); color: var(--accent);' : 
+                   'rgba(239, 68, 68, 0.2); color: #ef4444;';
+        }
+
+        function setupLookup() {
+            const input = document.getElementById('globalLookup');
+            const dropdown = document.getElementById('lookupDropdown');
+
+            input.addEventListener('input', (e) => {
+                const val = e.target.value.toLowerCase();
+                if (val.length < 1) {
+                    dropdown.style.display = 'none';
+                    return;
+                }
+
+                const filtered = students.filter(s => 
+                    s.name.toLowerCase().includes(val) ||
+                    s.id.toLowerCase().includes(val) ||
+                    s.department?.toLowerCase().includes(val) ||
+                    s.course.toLowerCase().includes(val)
+                );
+
+                if (filtered.length > 0) {
+                    dropdown.innerHTML = filtered.map(s => `
+                        <div class="search-item" onclick="showStudentSummary('${s.id}')">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="fw-bold text-white">${s.name.toUpperCase()}</span>
+                                <span class="text-accent x-small ls-1" style="font-family: 'Space Mono';">${s.id}</span>
+                            </div>
+                            <div class="text-muted x-small text-uppercase ls-1">${s.course} | DEPT: ${s.department || 'GEN'}</div>
+                        </div>
+                    `).join('');
+                    dropdown.style.display = 'block';
+                } else {
+                    dropdown.style.display = 'none';
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
+        function showStudentSummary(id) {
+            const s = students.find(x => x.id === id);
+            const modal = new bootstrap.Modal(document.getElementById('resultModal'));
+            const content = document.getElementById('modalContent');
+            const dropdown = document.getElementById('lookupDropdown');
+            dropdown.style.display = 'none';
+
+            const hasBalance = s.feeBalance > 0;
+
+            content.innerHTML = `
+                <div class="row g-4 mb-5">
+                    <div class="col-md-6">
+                        <div class="glass-panel p-4" style="height: 100%;">
+                            <h6 class="text-accent text-uppercase small ls-2 mb-4">Core Attributes</h6>
+                            <div class="d-flex flex-column gap-2 mb-0">
+                                <div class="d-flex justify-content-between x-small"><span class="text-muted">FULL NAME:</span> <span class="fw-bold">${s.name.toUpperCase()}</span></div>
+                                <div class="d-flex justify-content-between x-small"><span class="text-muted">IDENTIFIER:</span> <span class="text-accent fw-bold">${s.id}</span></div>
+                                <div class="d-flex justify-content-between x-small"><span class="text-muted">DEPARTMENT:</span> <span class="fw-bold">${s.department || 'ICT'}</span></div>
+                                <div class="d-flex justify-content-between x-small"><span class="text-muted">ENROLLMENT:</span> <span class="fw-bold">${s.yearOfAdmission || '2024'}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="glass-panel p-4 ${hasBalance ? 'border-danger' : 'border-success'}" style="height: 100%;">
+                            <h6 class="text-accent text-uppercase small ls-2 mb-4">Financial Health</h6>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="x-small text-muted">SETTLEMENT STATUS</span>
+                                <span class="badge ${hasBalance ? 'bg-danger' : 'bg-success'} text-uppercase x-small px-3">${hasBalance ? 'Arrears Flagged' : 'Cleared'}</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-end">
+                                <div>
+                                    <p class="x-small text-muted mb-0">RESIDUAL BALANCE</p>
+                                    <h4 class="mb-0 ${hasBalance ? 'text-danger' : 'text-success'} fw-bold">KES ${s.feeBalance.toLocaleString()}</h4>
+                                </div>
+                                <div class="text-end">
+                                    <p class="x-small text-muted mb-0">TOTAL CREDITED</p>
+                                    <p class="mb-0 small fw-bold text-white-50">KES ${s.feePaid.toLocaleString()}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-4 overflow-hidden">
+                    <h6 class="text-accent text-uppercase small ls-2 mb-4">Academic Moderation Summary</h6>
+                    ${hasBalance ? `
+                        <div class="alert alert-danger border-0 bg-danger bg-opacity-10 p-5 text-center">
+                            <i class="ph ph-lock-key" style="font-size: 3rem; display: block; margin-bottom: 1rem;"></i>
+                            <h5 class="fw-bold">RECORDS TEMPORARILY SEALED</h5>
+                            <p class="small mb-0">Academic data for ${s.id} is currently restricted due to a residual financial balance of KES ${s.feeBalance.toLocaleString()}.</p>
+                        </div>
+                    ` : `
+                        <table class="data-table mb-0">
+                            <thead>
+                                <tr class="x-small text-muted text-uppercase ls-1"><th>Unit Designation</th><th class="text-center">Score</th><th class="text-center">Grade</th></tr>
+                            </thead>
+                            <tbody>
+                                ${Object.entries(s.academic.marks).map(([unit, mark]) => `
+                                    <tr>
+                                        <td class="small fw-bold">${unit.toUpperCase()}</td>
+                                        <td class="text-center fw-bold text-white">${mark}</td>
+                                        <td class="text-center"><span class="perf-badge" style="background:${getGradeColor(mark >= 80 ? 'A' : 'B')}">${mark >= 80 ? 'A' : 'B'}</span></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `}
+                </div>
+            `;
+
+            modal.show();
+        }
+
+        function calculateClassMean() {
+            const totals = Array.from(document.querySelectorAll('.total-val')).map(td => parseInt(td.innerText));
+            const mean = (totals.reduce((a, b) => a + b, 0) / totals.length).toFixed(1);
+            
+            document.getElementById('meanScore').innerText = mean;
+            document.getElementById('passRate').innerText = "94.2%";
+            const res = document.getElementById('analysisResult');
+            res.classList.remove('d-none');
+            res.scrollIntoView({ behavior: 'smooth' });
+            
+            // Success Feedback
+            const toast = document.createElement('div');
+            toast.className = 'glass-panel position-fixed bottom-0 end-0 m-4 p-3 border-success';
+            toast.style.zIndex = '9999';
+            toast.style.borderColor = 'rgba(16, 185, 129, 0.5)';
+            toast.innerHTML = `<i class="ph ph-chart-line text-success me-2"></i> Performance Synchronization Complete`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function simulateExcelUpload() {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="ph ph-circle-notch pulse"></i> PROCESSING...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                alert("EXTERNAL DATA BRIDGE ESTABLISHED\n---------------------------\nRows Parsed: 128\nSchema Match: 100%\nVerification Status: PASSED\n---------------------------\nRecords integrated into current session.");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                calculateClassMean();
+            }, 1500);
+        }
+
+        function updateRow(input) {
+            const tr = input.closest('tr');
+            const inputs = tr.querySelectorAll('input');
+            const cat = parseInt(inputs[0].value) || 0;
+            const exam = parseInt(inputs[1].value) || 0;
+            const total = cat + exam;
+            tr.querySelector('.total-val').innerText = total;
+            
+            const grade = total >= 80 ? 'A' : total >= 70 ? 'B' : total >= 60 ? 'C' : 'D';
+            tr.querySelector('.grade-val').innerHTML = `<span class="perf-badge" style="background:${getGradeColor(grade)}">${grade}</span>`;
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

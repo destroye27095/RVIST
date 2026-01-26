@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#0f172a"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RVIST@2026"
+        android:textColor="#d4af37"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Student Portal Login"
+        android:textColor="#94a3b8"
+        android:textSize="16sp"
+        android:layout_marginBottom="32dp"/>
+
+    <EditText
+        android:id="@+id/etUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Admission / ID"
+        android:textColor="#ffffff"
+        android:textColorHint="#64748b"
+        android:backgroundTint="#ffffff"
+        android:layout_marginBottom="16dp"/>
+
+    <EditText
+        android:id="@+id/etPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColor="#ffffff"
+        android:textColorHint="#64748b"
+        android:backgroundTint="#ffffff"
+        android:layout_marginBottom="24dp"/>
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Access Portal"
+        android:backgroundTint="#d4af37"
+        android:textColor="#0f172a"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="© 2026 RVNP RIFTVALLEY NATIONAL POLYTECHNIC"
+        android:textColor="#64748b"
+        android:textSize="10sp"
+        android:gravity="center"
+        android:layout_marginTop="32dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AUTHOR: WAMOTO RAPHAEL (MERU UNIVERSITY IT STUDENT)\n2YRS EXPERIENCE IN APP DEVELOPMENT\nTERMS AND CONDITIONS APPLIED"
+        android:textColor="#475569"
+        android:textSize="8sp"
+        android:gravity="center"
+        android:layout_marginTop="8dp"/>
+
+</LinearLayout>

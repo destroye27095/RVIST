@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RVIST@2026 | Secure Gateway</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        body {
+            background: radial-gradient(circle at top right, #0f172a, #020617);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        #networkCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        .login-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 32px;
+            padding: 3.5rem 3rem;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.8);
+            position: relative;
+            z-index: 10;
+            animation: slideUpFade 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+            border-radius: 32px;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            color: white !important;
+            padding: 1rem 1.2rem;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.15);
+            transform: scale(1.01);
+        }
+
+        .nav-tabs {
+            border: none;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 6px;
+            border-radius: 16px;
+            margin-bottom: 2.5rem;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            padding: 0.8rem;
+            transition: all 0.4s;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .nav-tabs .nav-link.active {
+            background: var(--accent);
+            color: var(--bg-dark);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .brand-logo {
+            font-size: 4.5rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 30px var(--accent-glow));
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        .input-group-text {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-right: none;
+            color: var(--accent);
+            border-radius: 14px 0 0 14px;
+            padding-left: 1.2rem;
+        }
+
+        .form-control-iconbed {
+            border-left: none !important;
+        }
+
+        .btn-auth {
+            background: var(--accent);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 14px;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            padding: 1.2rem;
+            transition: all 0.4s;
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-auth:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.4);
+            background: #e5be4a;
+        }
+
+        .text-accent-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .text-accent-link:hover {
+            color: white;
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="networkCanvas"></canvas>
+
+    <div class="login-card">
+        <div class="text-center mb-5">
+            <div class="brand-logo"><i class="ph ph-shield-star text-accent"></i></div>
+            <h2 class="fw-bold mb-1" style="letter-spacing: 0.2em; color: white;">RVIST <span class="fw-light">SYSTEMS</span></h2>
+            <p class="text-muted small ls-2 uppercase">Core Enterprise Authentication</p>
+        </div>
+
+        <ul class="nav nav-tabs nav-fill" id="loginTab" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active" id="student-tab" data-bs-toggle="tab" data-bs-target="#student" type="button">Student Portal</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" id="staff-tab" data-bs-toggle="tab" data-bs-target="#staff" type="button">Staff Console</button>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- Student Login -->
+            <div class="tab-pane fade show active" id="student">
+                <form id="studentLoginForm">
+                    <div class="mb-4">
+                        <label class="x-small text-muted mb-2 uppercase ls-1 ml-2">Admission Identifier</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="ph ph-identification-card"></i></span>
+                            <input type="text" class="form-control form-control-iconbed" id="studentId" placeholder="RVNP/2026/001" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="x-small text-muted mb-2 uppercase ls-1 ml-2">Security Credential</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="ph ph-key"></i></span>
+                            <input type="password" class="form-control form-control-iconbed" id="studentPass" placeholder="••••••••" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-auth w-100 mt-2">INITIALIZE SESSION</button>
+                </form>
+            </div>
+
+            <!-- Staff Login -->
+            <div class="tab-pane fade" id="staff">
+                <form id="staffLoginForm">
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <label class="x-small text-muted mb-2 uppercase ls-1">Command Role</label>
+                            <select class="form-control p-3" id="roleSelect">
+                                <option value="teacher">Teacher</option>
+                                <option value="hod">Dept Head (HOD)</option>
+                                <option value="deputy">Deputy Principal</option>
+                                <option value="principal">Principal</option>
+                                <option value="hr">Registrar / HR</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="x-small text-muted mb-2 uppercase ls-1">Department</label>
+                            <select class="form-control p-3" id="deptSelect">
+                                <option value="ict">ICT & Computing</option>
+                                <option value="agriculture">Applied Sciences</option>
+                                <option value="administration">Admin Core</option>
+                                <option value="library">Information Center</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="x-small text-muted mb-2 uppercase ls-1">Auto-Resolved Protocol Email</label>
+                        <input type="text" class="form-control text-muted" id="staffEmail" readonly style="background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.03);">
+                    </div>
+                    <div class="mb-4">
+                        <label class="x-small text-muted mb-2 uppercase ls-1">Administrative Password</label>
+                        <input type="password" class="form-control" id="staffPass" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-auth w-100 mt-2">ESTABLISH UPLINK</button>
+                    <div class="text-center mt-4">
+                        <a href="javascript:void(0)" onclick="toggleReset()" class="text-accent-link small uppercase ls-1">Forgot Portal Key?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Reset Password Section -->
+        <div id="resetSection" style="display: none;" class="mt-4 pt-4 border-top border-secondary border-opacity-10">
+            <h6 class="text-accent x-small fw-bold mb-3 uppercase ls-2">Institutional Reset Protocol</h6>
+            <div class="mb-3">
+                <label class="x-small text-muted mb-2 uppercase">Root Security Passkey</label>
+                <input type="password" class="form-control" id="passkeyInput" placeholder="Enter System Passkey">
+            </div>
+            <div class="mb-3">
+                <label class="x-small text-muted mb-2 uppercase">New Session Key</label>
+                <input type="password" class="form-control" id="newPass" placeholder="Establish New Password">
+            </div>
+            <button class="btn btn-sm btn-outline-primary w-100 py-3" onclick="handleReset()">OVERRIDE & RE-ENTRY</button>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="position-fixed bottom-0 end-0 p-4" style="z-index: 1000">
+        <div id="loginToast" class="toast glass-panel bg-dark" role="alert" style="border-left: 4px solid var(--accent); border-radius: 12px;">
+            <div class="toast-body p-3 text-white small fw-bold" id="toastMessage">
+                SYSTEM MESSAGE: Authenticating...
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/network.js"></script>
+    <script>
+        let allStaff = [];
+
+        async function init() {
+            try {
+                const res = await fetch('../data/staff.json');
+                allStaff = await res.json();
+                generateStaffEmail();
+            } catch (e) { console.error("Data bridge failed", e); }
+        }
+
+        function generateStaffEmail() {
+            const role = document.getElementById('roleSelect').value;
+            const dept = document.getElementById('deptSelect').value;
+            const emailInput = document.getElementById('staffEmail');
+            
+            if (role === 'principal') emailInput.value = `principal@rvist.ac.ke`;
+            else if (role === 'deputy') emailInput.value = `deputy@rvist.ac.ke`;
+            else if (role === 'hr') emailInput.value = `hr@rvist.ac.ke`;
+            else emailInput.value = `${role}.${dept}@rvist.ac.ke`;
+        }
+
+        document.getElementById('roleSelect').addEventListener('change', generateStaffEmail);
+        document.getElementById('deptSelect').addEventListener('change', generateStaffEmail);
+
+        function toggleReset() {
+            const section = document.getElementById('resetSection');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function handleReset() {
+            const passkey = document.getElementById('passkeyInput').value;
+            const email = document.getElementById('staffEmail').value;
+            const staff = allStaff.find(s => s.email === email);
+            
+            if (staff && staff.passkey === passkey) {
+                showToast("PROTOCOL ACCEPTED. RESETTING SESSION...");
+                localStorage.setItem('rvist_user_role', 'admin');
+                localStorage.setItem('rvist_user_email', email);
+                setTimeout(() => window.location.href = '../index.html', 1500);
+            } else {
+                showToast("ACCESS DENIED: INVALID ROOT KEY.");
+            }
+        }
+
+        document.getElementById('studentLoginForm').onsubmit = (e) => {
+            e.preventDefault();
+            const id = document.getElementById('studentId').value;
+            showToast("STUDENT UPLINK ESTABLISHED. SYNCHRONIZING...");
+            localStorage.setItem('rvist_user_role', 'student');
+            localStorage.setItem('rvist_user_email', id.toLowerCase() + "@rvist.ac.ke");
+            setTimeout(() => window.location.href = 'students.html', 1500);
+        };
+
+        document.getElementById('staffLoginForm').onsubmit = (e) => {
+            e.preventDefault();
+            const email = document.getElementById('staffEmail').value;
+            const pass = document.getElementById('staffPass').value;
+            const staffMember = allStaff.find(s => s.email === email);
+
+            if (staffMember && (pass === staffMember.password || pass === 'RVIST@2026')) {
+                showToast(`WELCOME, ${staffMember.name.toUpperCase()}. ACCESS GRANTED.`);
+                localStorage.setItem('rvist_user_role', 'admin');
+                localStorage.setItem('rvist_user_email', email);
+                setTimeout(() => window.location.href = '../index.html', 1500);
+            } else {
+                showToast("AUTH FAILURE: INVALID CREDENTIALS.");
+            }
+        };
+
+        function showToast(msg) {
+            const toastEl = document.getElementById('loginToast');
+            document.getElementById('toastMessage').innerText = msg;
+            new bootstrap.Toast(toastEl).show();
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>

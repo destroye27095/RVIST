@@ -1,0 +1,38 @@
+[
+  {
+    "id": "TXN_001",
+    "studentId": "RVNP001",
+    "studentName": "Alice Wanjiku",
+    "amount": 20000,
+    "date": "2026-01-10",
+    "method": "M-Pesa",
+    "status": "Completed"
+  },
+  {
+    "id": "TXN_002",
+    "studentId": "RVNP002",
+    "studentName": "Brian Kipkorir",
+    "amount": 15000,
+    "date": "2026-01-15",
+    "method": "Bank Transfer",
+    "status": "Completed"
+  },
+  {
+    "id": "TXN_003",
+    "studentId": "RVNP004",
+    "studentName": "David Mutua",
+    "amount": 5000,
+    "date": "2026-01-20",
+    "method": "M-Pesa",
+    "status": "Processing"
+  },
+  {
+    "id": "TXN_004",
+    "studentId": "RVNP001",
+    "studentName": "Alice Wanjiku",
+    "amount": 25000,
+    "date": "2026-01-21",
+    "method": "Cash",
+    "status": "Completed"
+  }
+]

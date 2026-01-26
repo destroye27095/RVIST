@@ -1,0 +1,36 @@
+{
+  "name": "rvist-app",
+  "version": "1.0.0",
+  "description": "Premium School Management System for Rift Valley National Polytechnic (RVNP)",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8000 -c-1",
+    "serve": "python -m http.server 8000",
+    "dev": "npx live-server --port=8000",
+    "share": "npx localtunnel --port 8000",
+    "lint": "echo 'No linting configured yet'",
+    "test": "echo 'No tests configured yet'"
+  },
+  "keywords": [
+    "school-management",
+    "education",
+    "rvist",
+    "rvnp",
+    "student-portal",
+    "academic"
+  ],
+  "author": "WAMOTO RAPHAEL <wamoto@rvnp.ac.ke>",
+  "license": "PROPRIETARY",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/destroye27095/RVIST.git"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

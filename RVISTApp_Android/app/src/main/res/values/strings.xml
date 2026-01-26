@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RVIST@2026</string>
+    <string name="app_subtitle">Smart Management System</string>
+    
+    <!-- Login Screen -->
+    <string name="login_title">Student Portal Login</string>
+    <string name="hint_username">Admission / ID</string>
+    <string name="hint_password">Password</string>
+    <string name="btn_login">Access Portal</string>
+    <string name="forgot_password">Forgot Password?</string>
+    
+    <!-- Dashboard -->
+    <string name="welcome_back">Welcome Back,</string>
+    <string name="dashboard_title">Student Dashboard</string>
+    
+    <!-- Menu Items -->
+    <string name="menu_students">Students</string>
+    <string name="menu_staff">Staffroom</string>
+    <string name="menu_courses">Courses</string>
+    <string name="menu_projects">Projects</string>
+    <string name="menu_announcements">Announcements</string>
+    <string name="menu_voice">Student Voice</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_logout">Log Out</string>
+    
+    <!-- Features -->
+    <string name="feature_gps_tracking">GPS Tracking</string>
+    <string name="feature_qr_attendance">QR Attendance</string>
+    <string name="feature_voting">Elections &amp; Voting</string>
+    <string name="feature_fees">Fee Balance</string>
+    <string name="feature_results">Academic Results</string>
+    <string name="feature_library">Library Access</string>
+    
+    <!-- Messages -->
+    <string name="login_success">Login successful!</string>
+    <string name="login_failed">Invalid credentials</string>
+    <string name="password_requirement">Password must be 8-16 characters</string>
+    
+    <!-- Copyright -->
+    <string name="copyright">© 2026 RVNP RIFTVALLEY NATIONAL POLYTECHNIC. ALL COPYRIGHTS RESERVED.</string>
+    <string name="author_info">AUTHOR: WAMOTO RAPHAEL (MERU UNIVERSITY IT STUDENT)\n2YRS EXPERIENCE IN APP DEVELOPMENT\nTERMS AND CONDITIONS APPLIED</string>
+</resources>

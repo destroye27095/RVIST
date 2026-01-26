@@ -1,0 +1,23 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome for RVNP System",
+            "url": "http://localhost:8000",
+            "webRoot": "${workspaceFolder}/RVISTApp"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Start Local Server",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "dev"
+            ],
+            "cwd": "${workspaceFolder}/RVISTApp"
+        }
+    ]
+}

@@ -1,0 +1,57 @@
+[
+  {
+    "id": "CS101",
+    "name": "Introduction to Programming",
+    "code": "CS101",
+    "department": "Computer Science",
+    "students": 45,
+    "instructor": "Dr. Margaret Kamau",
+    "credits": 4,
+    "schedule": "Mon, Wed, Fri 9:00 AM",
+    "status": "Active"
+  },
+  {
+    "id": "EE201",
+    "name": "Circuit Analysis",
+    "code": "EE201",
+    "department": "Electrical Engineering",
+    "students": 38,
+    "instructor": "Prof. James Ochieng",
+    "credits": 3,
+    "schedule": "Tue, Thu 10:30 AM",
+    "status": "Active"
+  },
+  {
+    "id": "HM301",
+    "name": "Hotel Management",
+    "code": "HM301",
+    "department": "Hospitality",
+    "students": 32,
+    "instructor": "Ms. Grace Mwangi",
+    "credits": 3,
+    "schedule": "Mon, Wed 2:00 PM",
+    "status": "Active"
+  },
+  {
+    "id": "CS202",
+    "name": "Database Systems",
+    "code": "CS202",
+    "department": "Computer Science",
+    "students": 41,
+    "instructor": "Dr. Margaret Kamau",
+    "credits": 4,
+    "schedule": "Tue, Thu 1:00 PM",
+    "status": "Active"
+  },
+  {
+    "id": "EE102",
+    "name": "Digital Electronics",
+    "code": "EE102",
+    "department": "Electrical Engineering",
+    "students": 35,
+    "instructor": "Prof. James Ochieng",
+    "credits": 3,
+    "schedule": "Mon, Wed 11:00 AM",
+    "status": "Active"
+  }
+]

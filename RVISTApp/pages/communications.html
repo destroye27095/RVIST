@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RVIST@2026 | Communications Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .msg-template {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border-left: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .msg-template:hover {
+            background: rgba(212, 175, 55, 0.05);
+            border-left-color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .msg-template.active {
+            background: rgba(212, 175, 55, 0.1);
+            border-left-color: var(--accent);
+            border-left-width: 6px;
+        }
+
+        .email-preview {
+            background: #ffffff;
+            color: #333;
+            border-radius: 12px;
+            padding: 2.5rem;
+            min-height: 500px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            font-family: 'Outfit', sans-serif;
+            position: relative;
+            animation: slideUpFade 0.7s ease;
+        }
+
+        .batch-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            animation: fadeIn 0.4s ease;
+        }
+
+        .sending-status {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .dispatch-log-container {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="networkCanvas"></canvas>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar glass-panel">
+            <div class="brand">
+                <h2 class="text-accent">RVIST<span style="color: white; font-weight: 300;">@2026</span></h2>
+                <p class="text-muted" style="font-size: 0.8rem;">Smart Management System</p>
+            </div>
+
+            <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <a href="../index.html" class="nav-link">
+                    <i class="ph ph-squares-four"></i> Dashboard
+                </a>
+                <a href="students.html" class="nav-link">
+                    <i class="ph ph-student"></i> Students
+                </a>
+                <a href="communications.html" class="nav-link active">
+                    <i class="ph ph-broadcast"></i> Comms Hub
+                </a>
+                <a href="marking.html" class="nav-link">
+                    <i class="ph ph-exam"></i> Marking & Exams
+                </a>
+                <a href="fees.html" class="nav-link">
+                    <i class="ph ph-bank"></i> Fees Portal
+                </a>
+                <a href="announcements.html" class="nav-link">
+                    <i class="ph ph-megaphone"></i> Announcements
+                </a>
+            </nav>
+
+            <div style="margin-top: auto;">
+                <a href="login.html" class="nav-link text-danger mb-3" 
+                    onclick="localStorage.removeItem('rvist_user_role')">
+                    <i class="ph ph-sign-out"></i> Log Out
+                </a>
+                <div class="user-profile glass-panel" style="padding: 1rem; display: flex; align-items: center; gap: 1rem;">
+                    <div id="userAvatar" style="width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--bg-dark);">P</div>
+                    <div>
+                        <p id="userName" style="font-weight: 600; font-size: 0.9rem; margin: 0;">Principal Office</p>
+                        <p id="userRole" class="text-muted" style="font-size: 0.75rem; margin: 0;">Admin Access</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="mb-5">
+                <h1 class="text-uppercase" style="letter-spacing: 4px;">Bulk Automated <span class="text-accent">Dispatch</span></h1>
+                <p class="text-muted">Broadcast official institution communications with one-click automation.</p>
+            </header>
+
+            <div class="row g-4">
+                <!-- Template Selector -->
+                <div class="col-lg-4">
+                    <section class="glass-panel p-4 h-100">
+                        <h5 class="mb-4 text-accent text-uppercase small" style="letter-spacing: 2px;">1. Select Messaging Template</h5>
+                        <div class="d-flex flex-column gap-3">
+                            <div class="msg-template glass-panel p-3 active" data-type="fees">
+                                <h6 class="mb-1 fw-bold">Fee Balance Reminder</h6>
+                                <p class="small text-muted mb-0">Urgent notification for students with arrears.</p>
+                            </div>
+                            <div class="msg-template glass-panel p-3" data-type="exam">
+                                <h6 class="mb-1 fw-bold">Exam Admission Notice</h6>
+                                <p class="small text-muted mb-0">E-Admission cards for the Feb 2026 series.</p>
+                            </div>
+                            <div class="msg-template glass-panel p-3" data-type="results">
+                                <h6 class="mb-1 fw-bold">Results Release</h6>
+                                <p class="small text-muted mb-0">Official transcript availability broadcast.</p>
+                            </div>
+                            <div class="msg-template glass-panel p-3" data-type="receipt">
+                                <h6 class="mb-1 fw-bold">Payment Confirmation</h6>
+                                <p class="small text-muted mb-0">Auto-receipt with Course/Wing statistics.</p>
+                            </div>
+                        </div>
+
+                        <h5 class="mt-5 mb-4 text-accent text-uppercase small" style="letter-spacing: 2px;">2. Broadcast Targeting</h5>
+                        <div class="glass-panel p-4">
+                            <label class="small text-muted mb-2 text-uppercase fw-bold">Filtering Criteria</label>
+                            <select class="form-select bg-dark border-secondary text-white mb-4" id="filterType" style="border-radius: 8px;">
+                                <option value="all">Broadcast to All Students</option>
+                                <option value="arrears">Students with Arrears (>0)</option>
+                                <option value="cleared">Cleared Students (Status: Active)</option>
+                            </select>
+                            
+                            <div class="d-flex justify-content-between align-items-center bg-black bg-opacity-25 p-3 rounded-3">
+                                <div class="text-start">
+                                    <p class="mb-0 small text-muted">TARGET SIZE</p>
+                                    <h4 class="mb-0 text-accent" id="targetCount">0</h4>
+                                </div>
+                                <button class="btn btn-primary px-4 py-2" onclick="prepareBatch()">
+                                    <i class="ph ph-magic-wand me-1"></i> PREPARE
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Email Preview & Dispatch -->
+                <div class="col-lg-8">
+                    <section class="glass-panel p-4 overflow-hidden" style="min-height: 100%;">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="text-accent mb-0 text-uppercase small" style="letter-spacing: 2px;">Official Broadcast Preview</h5>
+                            <button class="btn btn-success px-4 py-2 fw-bold" id="dispatchBtn" disabled onclick="simulateDispatch()">
+                                <i class="ph ph-paper-plane-tilt me-1"></i> INITIATE DISPATCH
+                            </button>
+                        </div>
+
+                        <div class="email-preview" id="emailContent">
+                            <div class="text-center text-muted mt-5 py-5">
+                                <i class="ph ph-envelope-open" style="font-size: 5rem; opacity: 0.1; color: var(--accent);"></i>
+                                <h5 class="mt-4 fw-light">SELECT A TEMPLATE TO PREVIEW</h5>
+                                <p class="small">The preview will show how the email appears to the recipient.</p>
+                            </div>
+                        </div>
+
+                        <!-- Progress Section -->
+                        <div id="progressSection" class="mt-4 d-none">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="text-accent mb-0 small text-uppercase fw-bold">Live Transmission Log</h6>
+                                <span id="transmission-stat" class="small text-muted">0% Complete</span>
+                            </div>
+                            <div class="progress mb-3" style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                                <div id="dispatchBar" class="progress-bar bg-success progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+                            </div>
+                            <div id="batchLog" class="dispatch-log-container p-2">
+                                <!-- Log items -->
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="mt-5 text-center text-muted small" style="border-top: 1px solid rgba(255,255,255,0.05); padding: 2rem 0;">
+                <p class="mb-1">&copy; 2026 RVNP RIFTVALLEY NATIONAL POLYTECHNIC. ALL COPYRIGHTS RESERVED.</p>
+                <div style="opacity: 0.6; font-size: 0.7rem;">
+                    <p class="mb-0">SECURE DISPATCH ENGINE v2.1.0 | AUTHENTICATED ACCESS</p>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/network.js"></script>
+    <script>
+        let students = [];
+        let selectedTemplate = 'fees';
+        let targetedStudents = [];
+
+        const templates = {
+            fees: {
+                subject: "URGENT: Fee Balance Status Notification",
+                body: (s) => `
+                    <div style="font-family: sans-serif; color: #333;">
+                        <div style="text-align: center; margin-bottom: 2rem;">
+                            <h2 style="color: #0f172a; margin-bottom: 5px;">RIFTVALLEY NATIONAL POLYTECHNIC</h2>
+                            <p style="color: #d4af37; font-weight: bold; margin-top: 0;">OFFICE OF THE REGISTRAR</p>
+                        </div>
+                        <p>Date: ${new Date().toLocaleDateString()}</p>
+                        <p>Dear <strong>${s.name}</strong> (Adm No: ${s.id}),</p>
+                        <p>This is an automated notification regarding your fee status for the current academic session.</p>
+                        <div style="background: #f8fafc; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border: 1px solid #e2e8f0;">
+                            <p style="margin: 5px 0;"><strong>Primary Email:</strong> ${s.email}</p>
+                            <p style="margin: 5px 0;"><strong>Total Tuition Required:</strong> KES ${s.feeTotal.toLocaleString()}</p>
+                            <p style="margin: 5px 0;"><strong>Total Paid:</strong> KES ${s.feePaid.toLocaleString()}</p>
+                            <hr style="border: 0.5px solid #e2e8f0;">
+                            <p style="margin: 5px 0; color: #ef4444; font-size: 1.2rem;"><strong>Outstanding Balance: KES ${s.feeBalance.toLocaleString()}</strong></p>
+                        </div>
+                        <p>Please note that according to institutional policy, your access to <strong>Examination Results</strong> and <strong>Admission Cards</strong> will remain restricted until the full balance is cleared.</p>
+                        <p>Payments should be made to our official Paybill <strong>880123</strong>.</p>
+                        <br>
+                        <p>Regards,</p>
+                        <p><strong>Registrar (Automated Dispatch)</strong></p>
+                    </div>
+                `
+            },
+            exam: {
+                subject: "Notice: Academic Examination Timetable Dispatch",
+                body: (s) => `
+                    <div style="font-family: sans-serif; color: #333;">
+                        <h2 style="color: #0f172a;">EXAMINATION ADMISSION - ${s.department}</h2>
+                        <p>Dear ${s.name},</p>
+                        <p>Your examination admission card has been processed. Below is your verified schedule:</p>
+                        <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                            <tr style="background: #f1f5f9;"><th style="padding: 10px; text-align: left;">Date</th><th style="padding: 10px; text-align: left;">Unit</th><th style="padding: 10px; text-align: left;">Venue</th></tr>
+                            <tr><td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">2026-02-10</td><td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${s.course} Core</td><td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">Academic Block A</td></tr>
+                        </table>
+                        <div style="padding: 1rem; border-radius: 8px; background: #fffbeb; border: 1px solid #fde68a;">
+                            <p style="margin:0; font-size: 0.9rem; color: #92400e;"><strong>Note:</strong> Admission cards will only be active upon clearance of any fee balances.</p>
+                        </div>
+                    </div>
+                `
+            },
+            results: {
+                subject: "Official Notice: Semester Results Release",
+                body: (s) => `
+                    <div style="font-family: sans-serif; color: #333;">
+                        <div style="background: #0f172a; color: white; padding: 1rem; text-align: center; border-radius: 8px 8px 0 0;">
+                            <h3 style="margin: 0;">ACADEMIC PERFORMANCE REPORT</h3>
+                        </div>
+                        <div style="padding: 1.5rem; border: 1px solid #e2e8f0; border-top: 0;">
+                            <p>Dear ${s.name},</p>
+                            <p>Academic results for the current session have been officially uploaded to your student portal.</p>
+                            <p>Grade Summary: <strong>B+ (Average)</strong></p>
+                            <a href="#" style="display: inline-block; background: #d4af37; color: #000; padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 5px; margin-top: 1rem;">View Full Transcript</a>
+                        </div>
+                    </div>
+                `
+            },
+            receipt: {
+                subject: "PAYMENT RECEIVED: Official Institution Receipt",
+                body: (s, stdList) => {
+                    const wingCount = stdList.filter(x => x.course === s.course).length;
+                    const deptCount = stdList.filter(x => x.department === s.department).length;
+                    return `
+                    <div style="font-family: sans-serif; color: #333;">
+                        <div style="background: #10b981; color: white; padding: 1rem; border-radius: 8px; text-align: center; margin-bottom: 1.5rem;">
+                            <h3 style="margin: 0;">OFFICIAL PAYMENT RECEIPT</h3>
+                        </div>
+                        <p>We have successfully received your fee payment.</p>
+                        <div style="background: #f1f5f9; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                            <p><strong>Amount:</strong> KES ${s.feePaid.toLocaleString()}</p>
+                            <p><strong>Transaction ID:</strong> RVNP-TXN-${Math.floor(Math.random()*100000)}</p>
+                        </div>
+                        <div style="border: 1px dashed #cbd5e1; padding: 1rem; border-radius: 8px;">
+                            <h4 style="margin-top: 0; color: #0f172a;">Institutional Statistics (Wing Info):</h4>
+                            <p style="margin-bottom: 5px;">Students in your Course (${s.course}): <strong>${wingCount}</strong></p>
+                            <p style="margin-top: 0;">Students in your Dept (${s.department}): <strong>${deptCount}</strong></p>
+                        </div>
+                        <p style="font-size: 0.8rem; margin-top: 2rem; color: #64748b;">This is a system-generated receipt. No signature required.</p>
+                    </div>
+                    `;
+                }
+            }
+        };
+
+        async function init() {
+            try {
+                const resp = await fetch('../data/students.json');
+                students = await resp.json();
+                updateTargetCount();
+                
+                // Load User Info
+                const userEmail = localStorage.getItem('rvist_user_email');
+                if (userEmail) {
+                    const name = userEmail.split('@')[0].split('.')[0];
+                    const dept = userEmail.split('@')[0].split('.')[1] || 'Admin';
+                    document.getElementById('userName').innerText = (name.charAt(0).toUpperCase() + name.slice(1)) + " Office";
+                    document.getElementById('userRole').innerText = dept.toUpperCase() + " Department";
+                    document.getElementById('userAvatar').innerText = name.charAt(0).toUpperCase();
+                }
+            } catch (err) {
+                console.error("Initialization failed", err);
+            }
+        }
+
+        function updateTargetCount() {
+            const filter = document.getElementById('filterType').value;
+            if (filter === 'all') targetedStudents = students;
+            else if (filter === 'arrears') targetedStudents = students.filter(s => s.feeBalance > 0);
+            else if (filter === 'cleared') targetedStudents = students.filter(s => s.feeBalance === 0);
+            
+            document.getElementById('targetCount').innerText = targetedStudents.length;
+        }
+
+        document.getElementById('filterType').addEventListener('change', updateTargetCount);
+
+        document.querySelectorAll('.msg-template').forEach(tpl => {
+            tpl.addEventListener('click', () => {
+                document.querySelectorAll('.msg-template').forEach(t => t.classList.remove('active'));
+                tpl.classList.add('active');
+                selectedTemplate = tpl.dataset.type;
+                prepareBatch();
+            });
+        });
+
+        function prepareBatch() {
+            if (targetedStudents.length === 0) {
+                alert("No students match the selected criteria.");
+                return;
+            }
+            
+            const preview = document.getElementById('emailContent');
+            const student = targetedStudents[0];
+            const tpl = templates[selectedTemplate] || templates.fees;
+            
+            preview.innerHTML = `
+                <div style="width: 100%;">
+                    <div style="border-bottom: 1px solid #f1f5f9; padding-bottom: 1.5rem; margin-bottom: 2rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <h4 style="margin:0; color: #0f172a; font-weight: 700;">${tpl.subject}</h4>
+                            <span style="font-size: 10px; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; color: #475569;">PREVIEW MODE</span>
+                        </div>
+                        <p style="margin: 10px 0 0; font-size: 0.85rem; color: #64748b;">
+                            <strong>From:</strong> Rift Valley National Polytechnic <br>
+                            <strong>To:</strong> ${student.name} <${student.email}>
+                        </p>
+                    </div>
+                    ${tpl.body(student, students)}
+                </div>
+            `;
+            
+            document.getElementById('dispatchBtn').disabled = false;
+        }
+
+        function simulateDispatch() {
+            const btn = document.getElementById('dispatchBtn');
+            const progress = document.getElementById('progressSection');
+            const bar = document.getElementById('dispatchBar');
+            const log = document.getElementById('batchLog');
+            const stat = document.getElementById('transmission-stat');
+            
+            btn.disabled = true;
+            progress.classList.remove('d-none');
+            log.innerHTML = '';
+            
+            let current = 0;
+            const total = targetedStudents.length;
+
+            const interval = setInterval(() => {
+                if (current >= total) {
+                    clearInterval(interval);
+                    stat.innerText = "100% DISPATCH COMPLETE";
+                    
+                    const toast = document.createElement('div');
+                    toast.className = 'glass-panel position-fixed bottom-0 end-0 m-4 p-3 border-success';
+                    toast.style.zIndex = '9999';
+                    toast.style.borderColor = 'rgba(16, 185, 129, 0.5)';
+                    toast.innerHTML = `<i class="ph ph-check-circle text-success me-2"></i> Broadcast Successful: ${total} Students Notified`;
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 4000);
+                    return;
+                }
+
+                const s = targetedStudents[current];
+                const item = document.createElement('div');
+                item.className = 'batch-item';
+                item.innerHTML = `
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="ph ph-envelope-simple text-accent"></i>
+                        <span class="small">${s.name.toUpperCase()}</span>
+                    </div>
+                    <span class="sending-status text-success">TRANSMITTED <i class="ph ph-check"></i></span>
+                `;
+                log.prepend(item);
+
+                current++;
+                const perc = Math.round((current / total) * 100);
+                bar.style.width = `${perc}%`;
+                stat.innerText = `${perc}% TRANSMITTING...`;
+            }, 500);
+        }
+
+        init();
+    </script>
+</body>
+
+</html>
