@@ -1,0 +1,104 @@
+[
+  {
+    "id": "RVNP001",
+    "name": "Alice Wanjiku",
+    "course": "Computer Science",
+    "department": "ICT",
+    "year": 2,
+    "yearOfAdmission": 2024,
+    "age": 20,
+    "feeBalance": 15000,
+    "feePaid": 45000,
+    "feeTotal": 60000,
+    "attendance": 92,
+    "status": "Active",
+    "email": "alice.ict@students.rvist.ac.ke",
+    "phone": "+254 712 345678",
+    "academic": {
+      "avgGrade": "A-",
+      "credits": 42,
+      "lastExam": "2025-11-15",
+      "marks": {
+        "CS101": 85,
+        "CS202": 78,
+        "MA101": 92
+      }
+    }
+  },
+  {
+    "id": "RVNP002",
+    "name": "Brian Kipkorir",
+    "course": "Electrical Engineering",
+    "department": "Engineering",
+    "year": 1,
+    "yearOfAdmission": 2025,
+    "age": 19,
+    "feeBalance": 0,
+    "feePaid": 35000,
+    "feeTotal": 35000,
+    "attendance": 88,
+    "status": "Active",
+    "email": "brian.engineering@students.rvist.ac.ke",
+    "phone": "+254 722 000111",
+    "academic": {
+      "avgGrade": "B",
+      "credits": 28,
+      "lastExam": "2025-11-20",
+      "marks": {
+        "EE201": 65,
+        "EE102": 72,
+        "MA101": 68
+      }
+    }
+  },
+  {
+    "id": "RVNP003",
+    "name": "Cynthia Atieno",
+    "course": "Hospitality",
+    "department": "Hospitality",
+    "year": 3,
+    "yearOfAdmission": 2023,
+    "age": 22,
+    "feeBalance": 45000,
+    "feePaid": 5000,
+    "feeTotal": 50000,
+    "attendance": 75,
+    "status": "Suspended",
+    "email": "cynthia.hospitality@students.rvist.ac.ke",
+    "phone": "+254 733 999888",
+    "academic": {
+      "avgGrade": "C+",
+      "credits": 60,
+      "lastExam": "2025-10-10",
+      "marks": {
+        "HM301": 58,
+        "HM302": 62
+      }
+    }
+  },
+  {
+    "id": "RVNP004",
+    "name": "David Mutua",
+    "course": "Agriculture Science",
+    "department": "Agriculture",
+    "year": 2,
+    "yearOfAdmission": 2024,
+    "age": 21,
+    "feeBalance": 2000,
+    "feePaid": 38000,
+    "feeTotal": 40000,
+    "attendance": 95,
+    "status": "Active",
+    "email": "david.agriculture@students.rvist.ac.ke",
+    "phone": "+254 744 111222",
+    "academic": {
+      "avgGrade": "A",
+      "credits": 45,
+      "lastExam": "2025-11-18",
+      "marks": {
+        "AG101": 88,
+        "AG102": 91
+      }
+    }
+  }
+]

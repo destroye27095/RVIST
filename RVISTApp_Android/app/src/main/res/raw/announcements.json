@@ -1,0 +1,52 @@
+[
+  {
+    "id": "ANN001",
+    "title": "Mid-Term Examinations Schedule Released",
+    "category": "Academic",
+    "date": "2026-01-20",
+    "priority": "High",
+    "author": "Registrar Office",
+    "content": "The mid-term examination schedule for all departments has been published. Students are advised to check the notice board and prepare accordingly.",
+    "status": "Active"
+  },
+  {
+    "id": "ANN002",
+    "title": "Library Extended Hours",
+    "category": "Facilities",
+    "date": "2026-01-18",
+    "priority": "Medium",
+    "author": "Library Department",
+    "content": "The library will be open until 10:00 PM starting next week to support exam preparation. WiFi and study spaces are available.",
+    "status": "Active"
+  },
+  {
+    "id": "ANN003",
+    "title": "Fee Payment Deadline Extension",
+    "category": "Finance",
+    "date": "2026-01-15",
+    "priority": "High",
+    "author": "Finance Office",
+    "content": "The fee payment deadline has been extended to January 31st, 2026. Students with pending balances should clear before the deadline to avoid penalties.",
+    "status": "Active"
+  },
+  {
+    "id": "ANN004",
+    "title": "Career Fair 2026",
+    "category": "Events",
+    "date": "2026-01-10",
+    "priority": "Medium",
+    "author": "Student Affairs",
+    "content": "Annual career fair scheduled for February 15th. Leading companies will be recruiting. Update your CVs and attend preparation workshops.",
+    "status": "Active"
+  },
+  {
+    "id": "ANN005",
+    "title": "Sports Day Registration",
+    "category": "Events",
+    "date": "2026-01-08",
+    "priority": "Low",
+    "author": "Sports Department",
+    "content": "Inter-department sports day registration is now open. Register your team by January 25th. Events include football, volleyball, and athletics.",
+    "status": "Active"
+  }
+]
