@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=RVISTApp/index.html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to RVIST System...</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+        .loader {
+            text-align: center;
+        }
+        .spinner {
+            border: 4px solid rgba(212, 175, 55, 0.1);
+            border-top: 4px solid #d4af37;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        h2 {
+            color: #d4af37;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="loader">
+        <div class="spinner"></div>
+        <h2>Loading RVIST Smart Management System...</h2>
+        <p style="color: #94a3b8; font-size: 0.9rem;">Technology for Industrialization</p>
+    </div>
+    <script>
+        // Fallback redirect if meta refresh doesn't work
+        setTimeout(() => {
+            window.location.href = 'RVISTApp/index.html';
+        }, 100);
+    </script>
+</body>
+</html>
