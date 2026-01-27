@@ -16,6 +16,28 @@
     <!-- External CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/starfield.css">
+    <style>
+        .attendance-fill {
+            height: 100%;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('assets/bg-dashboard.png') no-repeat center center;
+            background-size: cover;
+            z-index: -2;
+            opacity: 0.2;
+        }
+    </style>
 </head>
 
 <body>
@@ -27,9 +49,10 @@
     <div class="app-container">
         <!-- Sidebar -->
         <aside class="sidebar glass-panel">
-            <div class="brand">
-                <h2 class="text-accent">RVIST<span style="color: white; font-weight: 300;">@2026</span></h2>
-                <p class="text-muted" style="font-size: 0.8rem;">Smart Management System</p>
+            <div class="brand text-center">
+                <img src="assets/rvist-logo.png" alt="RVIST Logo" style="width: 80px; height: 80px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));">
+                <h2 class="text-accent" style="font-size: 1.2rem; margin-bottom: 0.25rem;">RVIST<span style="color: white; font-weight: 300;">@2026</span></h2>
+                <p class="text-muted" style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px;">Technology for Industrialization</p>
             </div>
 
             <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
@@ -138,7 +161,7 @@
 
             <!-- Activities -->
             <div class="row g-4">
-                <div class="col-lg-8">
+                <div class="col-12">
                     <section class="glass-panel h-100" style="padding: 2rem;">
                         <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary border-opacity-10">
                             <h5 class="text-accent text-uppercase small ls-2 mb-0">Live Operational Telemetry</h5>
@@ -161,7 +184,7 @@
                         </div>
                     </section>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-12">
                     <section class="glass-panel p-4 h-100">
                         <h5 class="text-accent text-uppercase small ls-2 mb-4">Network Status</h5>
                         <div class="d-flex flex-column gap-3">

@@ -162,6 +162,19 @@
             color: white;
             text-shadow: 0 0 10px var(--accent-glow);
         }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('../assets/bg-login.png') no-repeat center center;
+            background-size: cover;
+            z-index: -2;
+            opacity: 0.3;
+        }
     </style>
 </head>
 
@@ -170,9 +183,10 @@
 
     <div class="login-card">
         <div class="text-center mb-5">
-            <div class="brand-logo"><i class="ph ph-shield-star text-accent"></i></div>
+            <img src="../assets/rvist-logo.png" alt="RVIST Official Logo" style="width: 140px; height: 140px; margin-bottom: 1.5rem; filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.6)); animation: pulse 3s infinite ease-in-out;">
             <h2 class="fw-bold mb-1" style="letter-spacing: 0.2em; color: white;">RVIST <span class="fw-light">SYSTEMS</span></h2>
             <p class="text-muted small ls-2 uppercase">Core Enterprise Authentication</p>
+            <p class="text-accent x-small fw-bold ls-1 uppercase" style="font-size: 0.65rem; margin-top: 0.5rem;">Technology for Industrialization</p>
         </div>
 
         <ul class="nav nav-tabs nav-fill" id="loginTab" role="tablist">
@@ -203,6 +217,18 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-auth w-100 mt-2">INITIALIZE SESSION</button>
+                    
+                    <div class="mt-4 text-center">
+                        <p class="x-small text-muted uppercase ls-2 mb-3">— Or Continue With —</p>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn glass-panel border-secondary border-opacity-25 w-100 py-2 small fw-bold" onclick="handleGoogleLogin()">
+                                <i class="ph ph-google-logo me-2 text-primary"></i> Google
+                            </button>
+                            <button type="button" class="btn glass-panel border-secondary border-opacity-25 w-100 py-2 small fw-bold" onclick="handlePhoneLogin()">
+                                <i class="ph ph-phone me-2 text-success"></i> Phone
+                            </button>
+                        </div>
+                    </div>
                 </form>
             </div>
 
@@ -320,10 +346,16 @@
         document.getElementById('studentLoginForm').onsubmit = (e) => {
             e.preventDefault();
             const id = document.getElementById('studentId').value;
-            showToast("STUDENT UPLINK ESTABLISHED. SYNCHRONIZING...");
-            localStorage.setItem('rvist_user_role', 'student');
-            localStorage.setItem('rvist_user_email', id.toLowerCase() + "@rvist.ac.ke");
-            setTimeout(() => window.location.href = 'students.html', 1500);
+            const pass = document.getElementById('studentPass').value;
+            
+            if (pass === 'RVNP@2026') {
+                showToast("STUDENT UPLINK ESTABLISHED. SYNCHRONIZING...");
+                localStorage.setItem('rvist_user_role', 'student');
+                localStorage.setItem('rvist_user_email', id.toLowerCase() + "@rvist.ac.ke");
+                setTimeout(() => window.location.href = 'students.html', 1500);
+            } else {
+                showToast("AUTH FAILURE: SECURE PORTAL KEY MISMATCH.");
+            }
         };
 
         document.getElementById('staffLoginForm').onsubmit = (e) => {
@@ -332,7 +364,7 @@
             const pass = document.getElementById('staffPass').value;
             const staffMember = allStaff.find(s => s.email === email);
 
-            if (staffMember && (pass === staffMember.password || pass === 'RVIST@2026')) {
+            if (staffMember && (pass === staffMember.password || pass === 'RVNP@2026')) {
                 showToast(`WELCOME, ${staffMember.name.toUpperCase()}. ACCESS GRANTED.`);
                 localStorage.setItem('rvist_user_role', 'admin');
                 localStorage.setItem('rvist_user_email', email);
@@ -341,6 +373,39 @@
                 showToast("AUTH FAILURE: INVALID CREDENTIALS.");
             }
         };
+
+        function handleGoogleLogin() {
+            showToast("REDIRECTING TO SECURE GOOGLE HUB...");
+            setTimeout(() => {
+                const mockEmail = prompt("Select Google Account (@rvist.ac.ke only):");
+                if (mockEmail && mockEmail.endsWith('@rvist.ac.ke')) {
+                    showToast(`AUTHENTICATED AS ${mockEmail.toUpperCase()}`);
+                    localStorage.setItem('rvist_user_role', 'student');
+                    localStorage.setItem('rvist_user_email', mockEmail);
+                    setTimeout(() => window.location.href = 'students.html', 1500);
+                } else if (mockEmail) {
+                    showToast("ERR: DOMAIN MUST BE @RVIST.AC.KE");
+                }
+            }, 1000);
+        }
+
+        function handlePhoneLogin() {
+            const phone = prompt("Enter Registerd Phone Number:");
+            if (phone) {
+                showToast("DISPATCHING OTP TO DEVICE...");
+                setTimeout(() => {
+                    const otp = prompt("Enter 6-digit OTP:");
+                    if (otp === '123456') {
+                        showToast("IDENTITY VERIFIED. ACCESS GRANTED.");
+                        localStorage.setItem('rvist_user_role', 'student');
+                        localStorage.setItem('rvist_user_email', 'phone.user@rvist.ac.ke');
+                        setTimeout(() => window.location.href = 'students.html', 1500);
+                    } else {
+                        showToast("INVALID OTP. BREACH PROTOCOL INITIATED.");
+                    }
+                }, 2000);
+            }
+        }
 
         function showToast(msg) {
             const toastEl = document.getElementById('loginToast');
