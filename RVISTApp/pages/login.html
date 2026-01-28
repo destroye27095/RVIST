@@ -18,7 +18,9 @@
 
     <style>
         body {
-            background: radial-gradient(circle at top right, #1e3a8a, #0f172a, #020617);
+            background: linear-gradient(135deg, #1e3a8a, #0f766e, #ca8a04, #881337);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -29,6 +31,24 @@
             position: relative;
         }
 
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            25% {
+                background-position: 50% 100%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            75% {
+                background-position: 50% 0%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
         body::before {
             content: '';
             position: absolute;
@@ -36,13 +56,13 @@
             right: -50%;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.15), transparent 70%);
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.2), transparent 70%);
             animation: pulseGlow 8s ease-in-out infinite;
         }
 
         @keyframes pulseGlow {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.1); }
+            0%, 100% { opacity: 0.4; transform: scale(1) rotate(0deg); }
+            50% { opacity: 0.7; transform: scale(1.2) rotate(180deg); }
         }
 
         #networkCanvas {
