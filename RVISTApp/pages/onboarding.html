@@ -151,6 +151,18 @@
                         <input type="tel" class="form-control" name="phone" placeholder="+254 7XX XXX XXX" required>
                     </div>
                     <div class="col-md-4">
+                        <label class="label-premium">Date of Birth</label>
+                        <input type="date" class="form-control" name="dob" id="dobInput" oninput="calculateAge()" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="label-premium">National ID Number</label>
+                        <input type="text" class="form-control" name="nationalId" placeholder="12345678" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="label-premium">Calculated Age</label>
+                        <input type="text" class="form-control bg-dark border-0" id="ageDisplay" placeholder="---" readonly>
+                    </div>
+                    <div class="col-md-4">
                         <label class="label-premium">Hometown</label>
                         <input type="text" class="form-control" name="hometown" placeholder="Nairobi">
                     </div>
@@ -282,6 +294,19 @@
                 else s.classList.remove('active');
             });
             document.getElementById(`sec${step}`).classList.add('active');
+        }
+
+        function calculateAge() {
+            const dob = document.getElementById('dobInput').value;
+            if (!dob) return;
+            const birthDate = new Date(dob);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            document.getElementById('ageDisplay').value = `${age} YEARS`;
         }
 
         function updateEmailPreview() {

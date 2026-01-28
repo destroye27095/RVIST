@@ -69,6 +69,12 @@
                 <a href="pages/announcements.html" class="nav-link">
                     <i class="ph ph-megaphone"></i> Announcements
                 </a>
+                <a href="pages/attendance.html" class="nav-link">
+                    <i class="ph ph-qr-code"></i> Attendance QR
+                </a>
+                <a href="pages/counseling.html" class="nav-link">
+                    <i class="ph ph-heart-break"></i> Counseling Portal
+                </a>
                 
                 <!-- Staff Only -->
                 <div class="nav-divider my-2 opacity-10 border-top border-white admin-only"></div>
@@ -149,25 +155,25 @@
                 </div>
                 <div class="stat-card glass-panel" style="animation-delay: 0.2s">
                     <div class="d-flex justify-content-between mb-3">
-                        <span class="text-muted x-small text-uppercase ls-2">Faculty Presence</span>
-                        <i class="ph ph-users-three text-primary"></i>
+                        <span class="text-muted x-small text-uppercase ls-2">Teachers Present Today</span>
+                        <i class="ph ph-chalkboard-teacher text-primary"></i>
                     </div>
-                    <div class="stat-value text-white">142</div>
+                    <div class="stat-value text-white" id="teachers-present">0</div>
                     <div class="progress mt-2" style="height: 4px; background: rgba(255,255,255,0.05);">
-                        <div class="progress-bar bg-primary" style="width: 98%"></div>
+                        <div class="progress-bar bg-primary" id="teachers-progress" style="width: 0%"></div>
                     </div>
-                    <p class="mb-0 x-small mt-2 text-muted">98.2% Institutional Attendance</p>
+                    <p class="mb-0 x-small mt-2 text-muted" id="teachers-meta">Institutional Presence Active</p>
                 </div>
-                <div class="stat-card glass-panel" style="animation-delay: 0.3s">
+                <div class="stat-card glass-panel special-highlight" style="animation-delay: 0.3s">
                     <div class="d-flex justify-content-between mb-3">
-                        <span class="text-muted x-small text-uppercase ls-2">Revenue Capture</span>
-                        <i class="ph ph-bank text-info"></i>
+                        <span class="text-muted x-small text-uppercase ls-2">Class Population</span>
+                        <i class="ph ph-users text-accent"></i>
                     </div>
-                    <div class="stat-value text-white">85.4%</div>
+                    <div class="stat-value text-white" id="students-present">0</div>
                     <div class="progress mt-2" style="height: 4px; background: rgba(255,255,255,0.05);">
-                        <div class="progress-bar bg-info" style="width: 85%"></div>
+                        <div class="progress-bar bg-accent" id="students-progress" style="width: 0%"></div>
                     </div>
-                    <p class="mb-0 x-small mt-2 text-white-50">Target Threshold: 90%</p>
+                    <p class="mb-0 x-small mt-2 text-white-50" id="students-meta">Live enrollment verified</p>
                 </div>
                 <div class="stat-card glass-panel" style="animation-delay: 0.4s">
                     <div class="d-flex justify-content-between mb-3">

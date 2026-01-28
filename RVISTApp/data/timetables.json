@@ -1,0 +1,35 @@
+[
+  {
+    "id": "UNIT_ICT_101",
+    "unitName": "Fundamentals of Computing",
+    "teacherId": "STAFF001",
+    "teacherName": "Eng. Maxwell",
+    "department": "ICT",
+    "day": "Monday",
+    "startTime": "08:00",
+    "durationMins": 120,
+    "room": "Lab 1"
+  },
+  {
+    "id": "UNIT_ICT_202",
+    "unitName": "Advanced Networking",
+    "teacherId": "STAFF002",
+    "teacherName": "Dr. Sarah",
+    "department": "ICT",
+    "day": "Wednesday",
+    "startTime": "10:30",
+    "durationMins": 90,
+    "room": "Room 402"
+  },
+  {
+    "id": "UNIT_ENG_101",
+    "unitName": "Structural Mechanics",
+    "teacherId": "STAFF003",
+    "teacherName": "Mr. Kamau",
+    "department": "Engineering",
+    "day": "Tuesday",
+    "startTime": "14:00",
+    "durationMins": 120,
+    "room": "Workshop B"
+  }
+]

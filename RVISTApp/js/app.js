@@ -110,7 +110,8 @@ async function initApp() {
         fetchData('data/students.json', 'students'),
         fetchData('data/staff.json', 'staff'),
         fetchData('data/courses.json', 'courses'),
-        fetchData('api/announcements?department=General', 'announcements'), // Use Backend for Announcements
+        fetchData('api/announcements?department=General', 'announcements'),
+        fetchData('api/analytics/presence', 'presence'),
         fetchData('data/projects.json', 'projects'),
         fetchData('data/voice.json', 'voice')
     ];
@@ -157,13 +158,28 @@ function updateDashboardStats() {
         animateValue(studentCountEl, 0, totalCount, 1500);
     }
 
-    // Fee Collection percentage
-    const feeStatEl = document.querySelector('.stat-card:nth-child(3) .stat-value');
-    if (feeStatEl && STATE.students.length > 0) {
-        const totalReq = STATE.students.reduce((acc, s) => acc + s.feeTotal, 0);
-        const totalPaid = STATE.students.reduce((acc, s) => acc + s.feePaid, 0);
-        const percentage = Math.round((totalPaid / totalReq) * 100);
-        feeStatEl.innerHTML = `${percentage}%`;
+    // Presence Statistics
+    if (STATE.presence) {
+        const teachersEl = document.getElementById('teachers-present');
+        const studentsPresentEl = document.getElementById('students-present');
+        const teachersProg = document.getElementById('teachers-progress');
+        const studentsProg = document.getElementById('students-progress');
+
+        if (teachersEl) {
+            animateValue(teachersEl, 0, STATE.presence.teachersCount, 1000);
+            const staffTotal = STATE.staff.length || 150;
+            const tPerc = Math.round((STATE.presence.teachersCount / staffTotal) * 100);
+            if (teachersProg) teachersProg.style.width = `${tPerc}%`;
+            document.getElementById('teachers-meta').innerText = `${tPerc}% Professional Attendance`;
+        }
+
+        if (studentsPresentEl) {
+            animateValue(studentsPresentEl, 0, STATE.presence.totalStudents, 1000);
+            const capacity = STATE.presence.totalCapacity || 1000;
+            const sPerc = Math.round((STATE.presence.totalStudents / capacity) * 100);
+            if (studentsProg) studentsProg.style.width = `${sPerc}%`;
+            document.getElementById('students-meta').innerText = `${sPerc}% Capacity Utilized`;
+        }
     }
 }
 

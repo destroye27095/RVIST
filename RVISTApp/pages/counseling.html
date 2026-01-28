@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RVIST@2026 | Guiding & Counseling</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            background: radial-gradient(circle at top left, #020617, #0f172a);
+            color: white;
+            min-height: 100vh;
+        }
+        .counseling-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 32px;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .camera-viewport {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: black;
+            border-radius: 20px;
+            border: 2px solid var(--accent);
+            overflow: hidden;
+            position: relative;
+        }
+        .diagnostic-overlay {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.6);
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid var(--accent);
+        }
+        .session-btn {
+            background: var(--accent);
+            color: var(--bg-dark);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .session-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+            background: #e5be3e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <header class="text-center mb-5">
+            <h2 class="text-accent fw-bold ls-2 uppercase">Guiding & Counseling Portal</h2>
+            <p class="text-muted small ls-1">Secure Institutional Mental Health & Academic Guidance Protocols</p>
+        </header>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="counseling-card mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="mb-0 text-accent small ls-2 uppercase">Live Diagnostic Uplink</h5>
+                        <div class="badge bg-danger pulse-accent">SECURE CHANNEL ACTIVE</div>
+                    </div>
+                    <div class="camera-viewport mb-4">
+                        <video id="video" width="100%" height="100%" autoplay playsinline style="object-fit: cover;"></video>
+                        <div class="diagnostic-overlay">
+                            <p class="x-small text-accent mb-1 uppercase ls-1">Kernel Status</p>
+                            <p class="mb-0 small fw-bold">ENCRYPTED</p>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3">
+                        <button class="session-btn flex-grow-1" onclick="startSession()">
+                            <i class="ph ph-video-camera me-2"></i> INITIALIZE VIRTUAL SESSION
+                        </button>
+                        <button class="btn glass-panel px-4 rounded-3 border-secondary border-opacity-25" onclick="stopSession()">
+                            <i class="ph ph-phone-x me-2"></i> TERMINATE
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="counseling-card h-100">
+                    <h5 class="text-accent small ls-2 uppercase mb-4">Institutional Counselors</h5>
+                    <div class="d-flex flex-column gap-3">
+                        <div class="glass-panel p-3 border-white border-opacity-5">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-primary rounded-circle" style="width: 40px; height: 40px; border: 2px solid var(--accent);"></div>
+                                <div>
+                                    <p class="mb-0 small fw-bold">Dr. Emily Moraa</p>
+                                    <p class="mb-0 x-small text-muted">Senior Clinical Psychologist</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-3 border-white border-opacity-5">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-success rounded-circle" style="width: 40px; height: 40px; border: 2px solid var(--accent);"></div>
+                                <div>
+                                    <p class="mb-0 small fw-bold">Mr. John Koech</p>
+                                    <p class="mb-0 x-small text-muted">Academic Career Guidance</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-4 opacity-10">
+                    <div class="p-3 bg-black bg-opacity-20 rounded-3">
+                        <p class="x-small text-accent fw-bold uppercase ls-1">Confidentiality Protocol</p>
+                        <p class="x-small text-muted mb-0">All sessions are end-to-end encrypted within the institutional kernel. No data is stored outside the secure counseling registry.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let stream = null;
+
+        async function startSession() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                document.getElementById('video').srcObject = stream;
+            } catch (err) {
+                alert("PERMISSION DENIED: Camera/Audio hardware could not be initialized.");
+            }
+        }
+
+        function stopSession() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                document.getElementById('video').srcObject = null;
+            }
+        }
+
+        window.onbeforeunload = stopSession;
+    </script>
+</body>
+</html>

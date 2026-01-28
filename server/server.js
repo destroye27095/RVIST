@@ -38,6 +38,18 @@ app.post('/api/v1/students/register', (req, res) => {
         newStudent.id = lastId + 1;
         newStudent.name = `${newStudent.firstName} ${newStudent.surname}`;
 
+        // Auto-calculate Age from DOB
+        if (newStudent.dob) {
+            const birthDate = new Date(newStudent.dob);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            newStudent.age = age;
+        }
+
         // Auto-generate Admission Number if not provided
         const year = new Date().getFullYear();
         if (!newStudent.admissionNo) {
@@ -185,6 +197,131 @@ app.post('/api/v1/finance/settle', (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+/**
+ * @section Quantum QR Attendance Engine
+ * Hard-locked timing: Open (Start - 5m) | Close (Start + 45m)
+ */
+app.post('/api/v1/attendance/scan', (req, res) => {
+    try {
+        const { unitId, userId, userRole, userName, userLocation } = req.body;
+        const timetables = readData('timetables');
+        const attendance = readData('attendance');
+        const now = new Date();
+        const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' });
+        const currentTime = now.getHours() * 60 + now.getMinutes();
+
+        // Find relevant unit session
+        const session = timetables.find(t => t.id === unitId && t.day === currentDay);
+
+        if (!session) {
+            return res.status(404).json({ success: false, message: "NO ACTIVE SESSION FOR THIS UNIT TODAY" });
+        }
+
+        // Calculate Window: [Start - 5m, Start + 45m]
+        const [startHours, startMins] = session.startTime.split(':').map(Number);
+        const startTimeInMins = startHours * 60 + startMins;
+        const windowOpen = startTimeInMins - 5;
+        const windowClose = startTimeInMins + 45;
+
+        if (currentTime < windowOpen) {
+            return res.status(403).json({ success: false, message: "REGISTRATION NOT YET OPEN (Opens 5 mins before start)" });
+        }
+
+        if (currentTime > windowClose) {
+            return res.status(403).json({ success: false, message: "SESSION TERMINATED (Locked 45 mins after start)" });
+        }
+
+        // Record Attendance
+        const newRecord = {
+            id: uuidv4(),
+            unitId,
+            unitName: session.unitName,
+            userId,
+            userName,
+            userRole,
+            timestamp: now.toISOString(),
+            location: userLocation || "UNKNOWN_STATION",
+            status: "Verified"
+        };
+
+        attendance.push(newRecord);
+        writeData('attendance', attendance);
+
+        res.json({
+            success: true,
+            message: `IDENTITY ASSIGNED TO ${session.unitName.toUpperCase()}`,
+            data: newRecord
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+/**
+ * @section Analytics Interface
+ * Provides summary data for the Admin Dashboard
+ */
+app.get('/api/v1/analytics/presence', (req, res) => {
+    try {
+        const attendance = readData('attendance');
+        const staff = readData('staff');
+        
+        const today = new Date().toISOString().split('T')[0];
+        const todaysScans = attendance.filter(a => a.timestamp.startsWith(today));
+        
+        const teachersPresent = new Set(todaysScans.filter(a => a.userRole === 'staff' || a.userRole === 'teacher').map(a => a.userId)).size;
+        const totalStudentsPresent = todaysScans.filter(a => a.userRole === 'student').length;
+        
+        // Population per class (Unit)
+        const populationPerUnit = {};
+        todaysScans.forEach(s => {
+            if (s.userRole === 'student') {
+                populationPerUnit[s.unitId] = (populationPerUnit[s.unitId] || 0) + 1;
+            }
+        });
+
+        res.json({
+            success: true,
+            data: {
+                teachersCount: teachersPresent,
+                totalStudents: totalStudentsPresent,
+                populationPerUnit: populationPerUnit,
+                totalCapacity: staff.reduce((acc, s) => acc + (s.teachingPortfolio?.reduce((sum, p) => sum + p.studentCount, 0) || 0), 0)
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+/**
+ * @section Reporting Protocol
+ * Exports attendance as CSV Spreadsheet
+ */
+app.get('/api/v1/attendance/export/:unitId', (req, res) => {
+    try {
+        const { unitId } = req.params;
+        const attendance = readData('attendance');
+        const records = attendance.filter(a => a.unitId === unitId);
+
+        if (records.length === 0) {
+            return res.status(404).send("No records found for this unit.");
+        }
+
+        // CSV Generation
+        const headers = "ID,Name,Role,Unit,Timestamp,Location,Status\n";
+        const rows = records.map(r => 
+            `${r.userId},${r.userName},${r.userRole},${r.unitName},${r.timestamp},${r.location},${r.status}`
+        ).join('\n');
+
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', `attachment; filename=attendance_${unitId}_${new Date().toISOString().split('T')[0]}.csv`);
+        res.status(200).send(headers + rows);
+    } catch (error) {
+        res.status(500).send(error.message);
     }
 });
 
