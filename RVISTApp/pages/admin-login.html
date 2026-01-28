@@ -225,26 +225,31 @@
                     </div>
                     <div class="mb-4">
                         <label class="x-small text-muted mb-2 uppercase ls-1">Administrative Password</label>
-                        <input type="password" class="form-control" id="staffPass" placeholder="Password" required>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="staffPass" placeholder="Password" required style="border-radius: 14px 0 0 14px;">
+                            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('staffPass', this)" style="border-left: 0; border-radius: 0 14px 14px 0;">
+                                <i class="ph ph-eye" id="staffPass-icon"></i>
+                            </button>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-auth w-100 mt-2">ESTABLISH UPLINK</button>
                     <div class="text-center mt-4">
                         <a href="javascript:void(0)" onclick="toggleReset()" class="text-accent-link small uppercase ls-1">Forgot Portal Key?</a>
                     </div>
                     
-                    <div class="mt-4 text-center border-top border-white border-opacity-10 pt-4">
+                    <div class="mt-4 text-center border-top border-white border-opacity-10 pt-4 contact-section" style="animation: fadeInUp 1.2s ease-out 0.5s both;">
                         <p class="x-small text-muted uppercase ls-2 mb-3">Institutional Command Nexus</p>
                         <div class="glass-panel p-3 mb-2 mx-auto border-white border-opacity-10" style="max-width: 320px; border-radius: 16px;">
                             <p class="small fw-bold text-white mb-1">P.O. BOX 7182 - 20100</p>
                             <a href="tel:+254742442161" class="text-accent fw-bold small text-decoration-none d-block mb-3">
                                 <i class="ph ph-phone-call me-1"></i> +254 742 442 161
                             </a>
-                            <div class="d-flex justify-content-center gap-3">
-                                <a href="https://www.rvnp.ac.ke/" target="_blank" title="Website" class="text-muted hover-accent"><i class="ph ph-globe fs-5"></i></a>
-                                <a href="https://www.facebook.com/RvistNakuru" target="_blank" title="Facebook" class="text-muted hover-accent"><i class="ph ph-facebook-logo fs-5"></i></a>
-                                <a href="https://www.instagram.com/RVNP%20Nakuru" target="_blank" title="Instagram" class="text-muted hover-accent"><i class="ph ph-instagram-logo fs-5"></i></a>
-                                <a href="https://www.tiktok.com/@rvnp_official" target="_blank" title="TikTok" class="text-muted hover-accent"><i class="ph ph-tiktok-logo fs-5"></i></a>
-                                <a href="mailto:principal@rvnp.ac.ke" title="Email" class="text-muted hover-accent"><i class="ph ph-envelope fs-5"></i></a>
+                            <div class="d-flex justify-content-center gap-3 social-icons">
+                                <a href="https://www.rvnp.ac.ke/" target="_blank" title="Website" class="social-link" style="color: #d4af37;"><i class="ph ph-globe fs-5"></i></a>
+                                <a href="https://www.facebook.com/RvistNakuru" target="_blank" title="Facebook" class="social-link" style="color: #1877f2;"><i class="ph ph-facebook-logo fs-5"></i></a>
+                                <a href="https://www.instagram.com/RVNP%20Nakuru" target="_blank" title="Instagram" class="social-link" style="color: #e4405f;"><i class="ph ph-instagram-logo fs-5"></i></a>
+                                <a href="https://www.tiktok.com/@rvnp_official" target="_blank" title="TikTok" class="social-link" style="color: #00f2ea;"><i class="ph ph-tiktok-logo fs-5"></i></a>
+                                <a href="mailto:principal@rvnp.ac.ke" title="Email" class="social-link" style="color: #ea4335;"><i class="ph ph-envelope fs-5"></i></a>
                             </div>
                         </div>
                     </div>
@@ -394,8 +399,41 @@
             new bootstrap.Toast(toastEl).show();
         }
 
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(inputId + '-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'ph ph-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'ph ph-eye';
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', init);
     </script>
+    <style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .social-link {
+            transition: all 0.3s ease;
+            opacity: 0.8;
+        }
+        .social-link:hover {
+            opacity: 1;
+            transform: translateY(-3px) scale(1.1);
+            filter: brightness(1.2);
+        }
+    </style>
 </body>
 
 </html>
