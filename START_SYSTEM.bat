@@ -11,25 +11,20 @@ set /p choice="Select Launch Protocol [1-2]: "
 
 if "%choice%"=="2" (
     echo.
-    echo Initializing Global Access Bridge...
-    cd RVISTApp
-    start "RVIST-Server" cmd /c "npm run dev"
+    echo Initializing Institutional Bridge...
+    start "RVIST-Backend" cmd /c "cd server && npm start"
+    start "RVIST-Frontend" cmd /c "cd RVISTApp && npm run dev"
     echo.
-    echo [SYSTEM] Local server initiated.
-    echo [SYSTEM] Requesting Global Tunnel...
+    echo [SYSTEM] Local cluster initiated.
+    echo [SYSTEM] Requesting Global Tunnel Hubs...
     echo ---------------------------------------------------
-    npx localtunnel --port 8000
+    npx localtunnel --port 5000 --subdomain rvist-kernel & npx localtunnel --port 8000 --subdomain rvist-ui
 ) else (
     echo.
-    echo Attempting to start local server on http://localhost:8000...
-    node -v >nul 2>&1
-    if %errorlevel% equ 0 (
-        cd RVISTApp
-        npm run dev
-    ) else (
-        echo [!] Node.js not found. Using PowerShell Fallback...
-        powershell -ExecutionPolicy Bypass -Command "Write-Host 'Starting Server...'; $p=8000; $l=New-Object Net.HttpListener; $l.Prefixes.Add('http://localhost:'+$p+'/'); $l.Start(); Write-Host 'LISTENING ON http://localhost:8000'; while($l.IsListening){$c=$l.GetContext(); $req=$c.Request; $res=$c.Response; $path=$req.Url.LocalPath; if($path -eq '/'){$path='/index.html'}; $file=Join-Path (Get-Location) 'RVISTApp'$path; if(Test-Path $file){$bytes=[IO.File]::ReadAllBytes($file); $res.ContentLength64=$bytes.Length; $res.OutputStream.Write($bytes,0,$bytes.Length)}else{$res.StatusCode=404}; $res.Close()}"
-    )
+    echo Attempting to start institutional nodes...
+    start "RVIST-Backend" cmd /c "cd server && npm start"
+    cd RVISTApp
+    npm run dev
 )
 
 pause
