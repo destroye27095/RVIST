@@ -34,12 +34,41 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
     background-image: 
-        linear-gradient(rgba(2, 6, 23, 0.88), rgba(2, 6, 23, 0.96)),
+        linear-gradient(rgba(2, 6, 23, 0.92), rgba(2, 6, 23, 0.98)),
         url('../assets/background.png');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
     animation: fadeIn 1.5s ease;
+}
+
+/* Institutional Portal Background Variants */
+body.bg-dashboard {
+    background-image: 
+        radial-gradient(circle at top right, rgba(212, 175, 55, 0.05), transparent 40%),
+        linear-gradient(rgba(2, 6, 23, 0.95), rgba(2, 6, 23, 0.98)),
+        url('../assets/background.png');
+}
+
+body.bg-finance {
+    background-image: 
+        radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.05), transparent 40%),
+        linear-gradient(rgba(2, 6, 23, 0.92), rgba(2, 6, 23, 0.98)),
+        url('../assets/background.png');
+}
+
+body.bg-collaboration {
+    background-image: 
+        radial-gradient(circle at center, rgba(59, 130, 246, 0.05), transparent 50%),
+        linear-gradient(rgba(2, 6, 23, 0.92), rgba(2, 6, 23, 0.98)),
+        url('../assets/background.png');
+}
+
+body.bg-attendance {
+    background-image: 
+        radial-gradient(circle at top left, rgba(212, 175, 55, 0.08), transparent 40%),
+        linear-gradient(rgba(2, 6, 23, 0.94), rgba(2, 6, 23, 0.97)),
+        url('../assets/background.png');
 }
 
 /* Base animation for all panels */
