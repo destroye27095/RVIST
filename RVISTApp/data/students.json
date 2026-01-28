@@ -1,6 +1,7 @@
 [
   {
-    "id": "RVNP001",
+    "id": 1,
+    "admissionNo": "RVNP/2024/001",
     "name": "Alice Wanjiku",
     "course": "Computer Science",
     "department": "ICT",
@@ -26,7 +27,8 @@
     }
   },
   {
-    "id": "RVNP002",
+    "id": 2,
+    "admissionNo": "RVNP/2025/002",
     "name": "Brian Kipkorir",
     "course": "Electrical Engineering",
     "department": "Engineering",
@@ -52,7 +54,8 @@
     }
   },
   {
-    "id": "RVNP003",
+    "id": 3,
+    "admissionNo": "RVNP/2023/003",
     "name": "Cynthia Atieno",
     "course": "Hospitality",
     "department": "Hospitality",
@@ -77,7 +80,8 @@
     }
   },
   {
-    "id": "RVNP004",
+    "id": 4,
+    "admissionNo": "RVNP/2024/004",
     "name": "David Mutua",
     "course": "Agriculture Science",
     "department": "Agriculture",

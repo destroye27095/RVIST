@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RVIST@2026 | Collaboration Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            background: #020617;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Outfit', sans-serif;
+        }
+        .main-wrapper {
+            display: flex;
+            height: 100vh;
+        }
+        /* Sidebar */
+        .collab-sidebar {
+            width: 320px;
+            background: rgba(15, 23, 42, 0.4);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(20px);
+        }
+        .sidebar-header {
+            padding: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .contact-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        .contact-card {
+            padding: 1rem;
+            border-radius: 16px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .contact-card:hover, .contact-card.active {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), #b8860b);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: black;
+        }
+        /* Chat Area */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: radial-gradient(circle at center, #0f172a, #020617);
+        }
+        .chat-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .messages-area {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .msg-bubble {
+            max-width: 70%;
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            position: relative;
+        }
+        .msg-sent {
+            align-self: flex-end;
+            background: var(--accent);
+            color: black;
+            border-bottom-right-radius: 4px;
+        }
+        .msg-received {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom-left-radius: 4px;
+        }
+        /* Call Overlay */
+        #callOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+        }
+        .call-actions {
+            display: flex;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .action-btn {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        .btn-hangup { background: #ef4444; color: white; }
+        .btn-mute { background: rgba(255,255,255,0.1); color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <!-- Sidebar -->
+        <div class="collab-sidebar">
+            <div class="sidebar-header">
+                <h5 class="fw-bold text-accent mb-0">Academic Network</h5>
+                <span class="x-small text-muted uppercase ls-1">Department: ICT & Computing</span>
+            </div>
+            <div class="contact-list">
+                <div class="contact-card active">
+                    <div class="avatar">WD</div>
+                    <div>
+                        <h6 class="mb-0 small fw-bold">DR. WAMOTO RAPHAEL</h6>
+                        <span class="x-small text-success">Online | Academic Advisor</span>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="avatar" style="background: #3b82f6;">CS</div>
+                    <div>
+                        <h6 class="mb-0 small fw-bold">COMPUTER SCIENCE FORUM</h6>
+                        <span class="x-small text-muted">24 Members Active</span>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="avatar" style="background: #10b981;">SM</div>
+                    <div>
+                        <h6 class="mb-0 small fw-bold">SARAH MUTUKU</h6>
+                        <span class="x-small text-muted">Offline | Peer</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 border-top border-white border-opacity-10">
+                <button class="btn btn-sm btn-outline-accent w-100 py-2 rounded-pill x-small fw-bold ls-1">
+                    <i class="ph ph-plus-circle me-1"></i> JOIN STUDY GROUP
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <div>
+                    <h6 class="mb-0 fw-bold">DR. WAMOTO RAPHAEL</h6>
+                    <span class="x-small text-muted">Academic Consulting Tunnel Active</span>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn glass-panel text-accent btn-sm px-3" onclick="startCall('audio')"><i class="ph ph-phone"></i></button>
+                    <button class="btn glass-panel text-accent btn-sm px-3" onclick="startCall('video')"><i class="ph ph-video-camera"></i></button>
+                    <button class="btn glass-panel text-muted btn-sm px-3"><i class="ph ph-dots-three-vertical"></i></button>
+                </div>
+            </div>
+
+            <div class="messages-area" id="messages">
+                <div class="msg-bubble msg-received">
+                    <p class="mb-1 small">Greetings. I've uploaded the new lecture notes on Distributed Systems. Please review them before tomorrow's lab.</p>
+                    <span class="x-small text-muted">09:12 AM</span>
+                </div>
+                <div class="msg-bubble msg-sent">
+                    <p class="mb-1 small">Received, Dr. I'm currently going through the Unit 4 matrices. Will submit the project file by EOD.</p>
+                    <span class="x-small text-muted">09:15 AM</span>
+                </div>
+            </div>
+
+            <div class="p-4 border-top border-white border-opacity-10">
+                <div class="d-flex gap-3 align-items-center bg-white bg-opacity-5 p-2 rounded-pill px-4 border border-white border-opacity-10">
+                    <button class="btn border-0 text-muted p-0"><i class="ph ph-paperclip fs-5"></i></button>
+                    <input type="text" class="form-control border-0 bg-transparent py-2 shadow-none" placeholder="Type an academic message...">
+                    <button class="btn btn-accent rounded-circle" style="width: 40px; height: 40px; padding: 0;"><i class="ph ph-paper-plane-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call Overlay -->
+    <div id="callOverlay">
+        <div class="avatar" style="width: 120px; height: 120px; font-size: 2.5rem; margin-bottom: 2rem; box-shadow: 0 0 50px rgba(212,175,55,0.3);">WD</div>
+        <h4 class="fw-bold">DR. WAMOTO RAPHAEL</h4>
+        <p class="text-accent ls-2 animate-pulse" id="callStatus">ACADEMIC UPLINK CONNECTING...</p>
+        
+        <div class="call-actions">
+            <button class="action-btn btn-mute"><i class="ph ph-microphone-slash"></i></button>
+            <button class="action-btn btn-hangup" onclick="endCall()"><i class="ph ph-phone-disconnect"></i></button>
+            <button class="action-btn btn-mute"><i class="ph ph-video-camera-slash"></i></button>
+        </div>
+    </div>
+
+    <script>
+        function startCall(type) {
+            const overlay = document.getElementById('callOverlay');
+            const status = document.getElementById('callStatus');
+            overlay.style.display = 'flex';
+            status.innerText = `ESTABLISHING ${type.toUpperCase()} CONSULTATION...`;
+            
+            setTimeout(() => {
+                status.innerText = `SECURE ${type.toUpperCase()} SESSION ACTIVE`;
+                status.style.color = '#10b981';
+            }, 2500);
+        }
+
+        function endCall() {
+            document.getElementById('callOverlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

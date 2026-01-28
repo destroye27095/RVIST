@@ -190,33 +190,51 @@
         </div>
 
         <div class="text-center mb-4">
-            <h4 class="text-accent fw-bold ls-2 uppercase">Student Secure Portal</h4>
-            <p class="text-muted small">Enter phone number to access your academic record</p>
+            <h4 class="text-accent fw-bold ls-2 uppercase">Staff Command Console</h4>
+            <p class="text-muted small">Administrative Access Only</p>
         </div>
 
         <div class="tab-content">
-            <!-- Student Login -->
-            <div class="tab-pane fade show active" id="student">
-                <form id="studentLoginForm">
-                    <div class="mb-4">
-                        <label class="x-small text-muted mb-2 uppercase ls-1 ml-2">Registered Phone Number</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="ph ph-phone"></i></span>
-                            <input type="tel" class="form-control form-control-iconbed" id="studentPhone" placeholder="+254 7XX XXX XXX" required>
+            <!-- Staff Login -->
+            <div class="tab-pane fade show active" id="staff">
+                <form id="staffLoginForm">
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <label class="x-small text-muted mb-2 uppercase ls-1">Command Role</label>
+                            <select class="form-control p-3" id="roleSelect">
+                                <option value="teacher">Teacher</option>
+                                <option value="hod">Dept Head (HOD)</option>
+                                <option value="deputy">Deputy Principal</option>
+                                <option value="principal">Principal</option>
+                                <option value="hr">Registrar / HR</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="x-small text-muted mb-2 uppercase ls-1">Department</label>
+                            <select class="form-control p-3" id="deptSelect">
+                                <option value="ict">ICT & Computing</option>
+                                <option value="agriculture">Applied Sciences</option>
+                                <option value="administration">Admin Core</option>
+                                <option value="library">Information Center</option>
+                            </select>
                         </div>
                     </div>
                     <div class="mb-4">
-                        <label class="x-small text-muted mb-2 uppercase ls-1 ml-2">Security Credential</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="ph ph-key"></i></span>
-                            <input type="password" class="form-control form-control-iconbed" id="studentPass" placeholder="••••••••" required>
-                        </div>
+                        <label class="x-small text-muted mb-2 uppercase ls-1">Auto-Resolved Protocol Email</label>
+                        <input type="text" class="form-control text-muted" id="staffEmail" readonly style="background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.03);">
                     </div>
-                    <button type="submit" class="btn btn-auth w-100 mt-2">INITIALIZE UPLINK</button>
+                    <div class="mb-4">
+                        <label class="x-small text-muted mb-2 uppercase ls-1">Administrative Password</label>
+                        <input type="password" class="form-control" id="staffPass" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn btn-auth w-100 mt-2">ESTABLISH UPLINK</button>
+                    <div class="text-center mt-4">
+                        <a href="javascript:void(0)" onclick="toggleReset()" class="text-accent-link small uppercase ls-1">Forgot Portal Key?</a>
+                    </div>
                     
-                    <div class="mt-4 text-center">
-                        <p class="x-small text-muted uppercase ls-2 mb-2">— Institutional Nexus —</p>
-                        <div class="glass-panel p-3 mb-4 mx-auto border-white border-opacity-10" style="max-width: 320px; border-radius: 16px;">
+                    <div class="mt-4 text-center border-top border-white border-opacity-10 pt-4">
+                        <p class="x-small text-muted uppercase ls-2 mb-3">Institutional Command Nexus</p>
+                        <div class="glass-panel p-3 mb-2 mx-auto border-white border-opacity-10" style="max-width: 320px; border-radius: 16px;">
                             <p class="small fw-bold text-white mb-1">P.O. BOX 7182 - 20100</p>
                             <a href="tel:+254742442161" class="text-accent fw-bold small text-decoration-none d-block mb-3">
                                 <i class="ph ph-phone-call me-1"></i> +254 742 442 161
@@ -229,12 +247,11 @@
                                 <a href="mailto:principal@rvnp.ac.ke" title="Email" class="text-muted hover-accent"><i class="ph ph-envelope fs-5"></i></a>
                             </div>
                         </div>
-                        <p class="x-small text-muted uppercase ls-2 mb-3">— New Student? —</p>
-                        <a href="onboarding.html" class="text-accent-link small uppercase ls-1">Register Academic Account</a>
                     </div>
                 </form>
             </div>
         </div>
+        
 
         <!-- Reset Password Section -->
         <div id="resetSection" style="display: none;" class="mt-4 pt-4 border-top border-secondary border-opacity-10">

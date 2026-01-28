@@ -16,6 +16,14 @@ const STATE = {
     user: null
 };
 
+// API Configuration
+const API_CONFIG = {
+    baseUrl: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? 'http://localhost:5000/api/v1' 
+        : 'https://rvist-backend.onrender.com/api/v1', // Placeholder for deployment
+    useMock: false // Toggle this to force local JSONs
+};
+
 // Simulated ACID Transaction Wrapper
 function performTransaction(actionName, operation) {
     const timestamp = new Date().toLocaleTimeString();
@@ -66,18 +74,29 @@ function renderLogs() {
 // Data Fetching with Error Handling
 async function fetchData(endpoint, stateKey) {
     try {
-        // Adjust endpoint based on path
-        const isSubPage = window.location.pathname.includes('/pages/');
-        const finalEndpoint = isSubPage ? `../${endpoint}` : endpoint;
+        let finalEndpoint;
+        
+        if (!API_CONFIG.useMock && endpoint.startsWith('api/')) {
+            finalEndpoint = `${API_CONFIG.baseUrl}/${endpoint.replace('api/', '')}`;
+        } else {
+            const isSubPage = window.location.pathname.includes('/pages/');
+            finalEndpoint = isSubPage ? `../${endpoint}` : endpoint;
+        }
 
         const response = await fetch(finalEndpoint);
         if (!response.ok) throw new Error(`HTTP ${response.status}: Failed to fetch ${finalEndpoint}`);
         
-        const data = await response.json();
+        const result = await response.json();
+        const data = result.data || result; // Handle both direct JSON and { success, data } structures
+        
         STATE[stateKey] = data;
         return { success: true, data };
     } catch (error) {
-        console.error(`Failed to load ${stateKey}:`, error);
+        console.warn(`Fallback to local data for ${stateKey} due to:`, error.message);
+        // Silently fallback to local if backend fails and we weren't already trying local
+        if (!endpoint.startsWith('data/')) {
+            return fetchData(`data/${stateKey}.json`, stateKey);
+        }
         return { success: false, error: error.message };
     }
 }
@@ -91,7 +110,7 @@ async function initApp() {
         fetchData('data/students.json', 'students'),
         fetchData('data/staff.json', 'staff'),
         fetchData('data/courses.json', 'courses'),
-        fetchData('data/announcements.json', 'announcements'),
+        fetchData('api/announcements?department=General', 'announcements'), // Use Backend for Announcements
         fetchData('data/projects.json', 'projects'),
         fetchData('data/voice.json', 'voice')
     ];
@@ -174,6 +193,11 @@ function checkAuthentication() {
     } else if (userRole) {
         STATE.user = { role: userRole, email: userEmail };
         
+        // Role-based UI visibility
+        if (userRole === 'student') {
+            document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+        }
+
         // Sync with UI
         const userNameEl = document.getElementById('userName');
         const userRoleEl = document.getElementById('userRole');
@@ -186,7 +210,7 @@ function checkAuthentication() {
             if (userNameEl) userNameEl.innerText = `${userName} OFFICE`;
             if (userRoleEl) userRoleEl.innerText = userRole === 'admin' ? 'Administrative Access' : 'Student Access';
             if (userAvatarEl) userAvatarEl.innerText = userName.charAt(0);
-            if (greeting && currentPath.includes('index.html')) {
+            if (greeting && (currentPath.endsWith('index.html') || currentPath === '/')) {
                 greeting.innerHTML = `Welcome back, <span class="text-accent">${userName}</span>`;
             }
         }
