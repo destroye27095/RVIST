@@ -278,7 +278,7 @@
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
             const filtered = allStudents.filter(student => 
-                student.id.toLowerCase().includes(searchTerm) ||
+                String(student.id).toLowerCase().includes(searchTerm) ||
                 student.name.toLowerCase().includes(searchTerm) ||
                 student.course.toLowerCase().includes(searchTerm)
             );
@@ -286,7 +286,7 @@
         });
 
         function viewStudent(studentId) {
-            const student = allStudents.find(s => s.id === studentId);
+            const student = allStudents.find(s => String(s.id) === String(studentId));
             if (!student) return;
 
             const modalBody = document.getElementById('studentDetailsBody');

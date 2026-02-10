@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js (Will be loaded in body) -->
     <!-- Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <!-- External CSS -->
@@ -128,7 +129,7 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <header style="margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 2rem;">
+            <header style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 2rem;">
                 <div>
                     <h6 class="text-accent text-uppercase ls-2 fw-bold mb-1">Institutional Oversight</h6>
                     <h1 class="text-uppercase" style="letter-spacing: 4px;" id="greeting">Control <span class="text-accent">Center</span></h1>
@@ -139,9 +140,31 @@
                         <i class="ph ph-clock text-accent"></i>
                         <span id="liveTime" class="small fw-bold text-white-50">00:00:00</span>
                     </div>
-                    <button class="btn btn-primary px-4"><i class="ph ph-plus-circle me-1"></i> GLOBAL ACTION</button>
+                    <button class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#globalActionModal"><i class="ph ph-lightning me-1"></i> GLOBAL ACTIONS</button>
                 </div>
             </header>
+
+            <!-- System Monitor Section -->
+            <section class="mb-5">
+                <div class="glass-panel p-4 position-relative overflow-hidden">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h5 class="text-accent text-uppercase small ls-2 mb-1">System Load Monitor</h5>
+                            <p class="x-small text-muted mb-0">Live CPU / MEMORY / CLOUD THRUPUT</p>
+                        </div>
+                        <div class="d-flex gap-3">
+                            <span class="x-small text-muted"><span class="badge bg-primary" style="width: 8px; height: 8px; padding: 0; border-radius: 50%; display: inline-block; margin-right: 5px;"></span> CPU Core</span>
+                            <span class="x-small text-muted"><span class="badge bg-success" style="width: 8px; height: 8px; padding: 0; border-radius: 50%; display: inline-block; margin-right: 5px;"></span> Memory</span>
+                        </div>
+                    </div>
+                    <div style="height: 250px; width: 100%;">
+                        <canvas id="systemChart"></canvas>
+                    </div>
+                    <div class="position-absolute bottom-0 end-0 p-3 opacity-25">
+                        <i class="ph ph-cpu" style="font-size: 5rem;"></i>
+                    </div>
+                </div>
+            </section>
 
             <!-- Stats Row -->
             <section class="stats-grid mb-5">
@@ -226,6 +249,8 @@
                                     <div class="rounded-circle bg-primary" style="width: 8px; height: 8px;"></div>
                                     <span class="small fw-bold">LMS Bridge</span>
                                 </div>
+
+
                                 <span class="x-small text-primary">CONNECTED</span>
                             </div>
                             <div class="glass-panel p-3 d-flex align-items-center justify-content-between">
@@ -250,9 +275,43 @@
         </main>
     </div>
 
+    <!-- Global Action Modal (Correctly Placed) -->
+    <div class="modal fade" id="globalActionModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-panel border-0 text-white" style="background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px);">
+                <div class="modal-header border-secondary border-opacity-10">
+                    <h5 class="modal-title text-accent"><i class="ph ph-lightning me-2"></i>Global System Actions</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="d-grid gap-3">
+                        <button class="btn btn-outline-danger p-3 text-start d-flex justify-content-between align-items-center" onclick="triggerSystemAction('LOCKDOWN')">
+                            <span><i class="ph ph-lock-key me-2"></i> Initiate Lockdown Protocol</span>
+                            <i class="ph ph-caret-right"></i>
+                        </button>
+                        <button class="btn btn-outline-warning p-3 text-start d-flex justify-content-between align-items-center" onclick="triggerSystemAction('CACHE_CLEAR')">
+                            <span><i class="ph ph-trash me-2"></i> Purge System Cache</span>
+                            <i class="ph ph-caret-right"></i>
+                        </button>
+                        <button class="btn btn-outline-info p-3 text-start d-flex justify-content-between align-items-center" onclick="triggerSystemAction('SYNC_LMS')">
+                            <span><i class="ph ph-arrows-clockwise me-2"></i> Force LMS Synchronization</span>
+                            <i class="ph ph-caret-right"></i>
+                        </button>
+                        <button class="btn btn-outline-success p-3 text-start d-flex justify-content-between align-items-center" onclick="triggerSystemAction('BROADCAST')">
+                            <span><i class="ph ph-broadcast me-2"></i> Emergency Broadcast</span>
+                            <i class="ph ph-caret-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/dashboard-charts.js"></script>
     <script src="js/network.js"></script>
     <script>
         // Real-time Clock

@@ -267,7 +267,92 @@ window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.heig
 
 <!-- STUDENT LOGIN & TOGGLE PASSWORD -->
 <script>
-// keep previous JS login logic (student/staff/google/otp/reset)
+const studentLoginForm = document.getElementById('studentLoginForm');
+
+        if (studentLoginForm) {
+            studentLoginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const phone = document.getElementById('studentPhone').value;
+                const pass = document.getElementById('studentPass').value;
+                const btn = e.target.querySelector('button[type="submit"]');
+                const originalText = btn.innerText;
+
+                // Loading State
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> AUTHENTICATING...';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    if (pass === '1234567890') {
+                        // Success
+                        showToast("IDENTITY VERIFIED. ACCESS GRANTED.", "success");
+                        localStorage.setItem('rvist_user_role', 'student');
+                        localStorage.setItem('rvist_user_email', phone.replace(/\s+/g, '') + "@students.rvist.ac.ke"); // Simulated email from phone
+                        
+                        setTimeout(() => {
+                            window.location.href = 'students.html';
+                        }, 1000);
+                    } else {
+                        // Failure
+                        showToast("ACCESS DENIED: INVALID CREDENTIALS", "error");
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                        document.getElementById('studentPass').value = '';
+                    }
+                }, 1500);
+            });
+        }
+
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(inputId + '-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('ph-eye', 'ph-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('ph-eye-slash', 'ph-eye');
+            }
+        }
+
+        function showToast(msg, type='info') {
+             // Simple toast implementation or reuse if available
+            const toastContainer = document.getElementById('toast-container') || createToastContainer();
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast glass-panel ali';
+            toast.style.minWidth = '250px';
+            toast.style.marginBottom = '10px';
+            toast.style.borderColor = type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#d4af37';
+            toast.style.borderLeft = '4px solid ' + (type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#d4af37');
+            toast.innerHTML = `
+                <div class="d-flex align-items-center text-white p-3">
+                    <span class="me-2"><i class="ph ${type === 'success' ? 'ph-check-circle' : type === 'error' ? 'ph-warning-circle' : 'ph-info'}"></i></span>
+                    <strong class="me-auto">System Message</strong>
+                    <small>Just now</small>
+                    <button type="button" class="btn-close btn-close-white ms-2" onclick="this.parentElement.parentElement.remove()"></button>
+                </div>
+                <div class="toast-body text-white small p-3 pt-0">
+                    ${msg}
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            const bsToast = new bootstrap.Toast(toast, { delay: 3000 });
+            bsToast.show();
+            
+            toast.addEventListener('hidden.bs.toast', () => {
+                toast.remove();
+            });
+        }
+
+        function createToastContainer() {
+            const container = document.createElement('div');
+            container.id = 'toast-container';
+            container.className = 'position-fixed bottom-0 end-0 p-3';
+            container.style.zIndex = '1100';
+            document.body.appendChild(container);
+            return container;
+        }
 </script>
 
 </body>

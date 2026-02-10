@@ -26,7 +26,7 @@
             "runtimeArgs": [
                 "--remote-debugging-port=9222"
             ],
-            "url": "c:\\Users\\ADMIN\\.antigravity\\extensions\\ms-edgedevtools.vscode-edge-devtools-2.1.10-universal\\out\\startpage\\index.html", // Provide your project's url to finish configuring
+            "url": "http://localhost:8000",
             "presentation": {
                 "hidden": true
             }
@@ -39,7 +39,7 @@
                 "--headless",
                 "--remote-debugging-port=9222"
             ],
-            "url": "c:\\Users\\ADMIN\\.antigravity\\extensions\\ms-edgedevtools.vscode-edge-devtools-2.1.10-universal\\out\\startpage\\index.html", // Provide your project's url to finish configuring
+            "url": "http://localhost:8000",
             "presentation": {
                 "hidden": true
             }
@@ -48,7 +48,7 @@
             "type": "vscode-edge-devtools.debug",
             "name": "Open Edge DevTools",
             "request": "attach",
-            "url": "c:\\Users\\ADMIN\\.antigravity\\extensions\\ms-edgedevtools.vscode-edge-devtools-2.1.10-universal\\out\\startpage\\index.html", // Provide your project's url to finish configuring
+            "url": "http://localhost:8000",
             "presentation": {
                 "hidden": true
             }

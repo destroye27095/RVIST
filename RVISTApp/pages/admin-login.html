@@ -390,20 +390,7 @@
             }
         }
 
-        document.getElementById('studentLoginForm').onsubmit = (e) => {
-            e.preventDefault();
-            const id = document.getElementById('studentId').value;
-            const pass = document.getElementById('studentPass').value;
-            
-            if (pass === 'RVNP@2026') {
-                showToast("STUDENT UPLINK ESTABLISHED. SYNCHRONIZING...");
-                localStorage.setItem('rvist_user_role', 'student');
-                localStorage.setItem('rvist_user_email', id.toLowerCase() + "@rvist.ac.ke");
-                setTimeout(() => window.location.href = 'students.html', 1500);
-            } else {
-                showToast("AUTH FAILURE: SECURE PORTAL KEY MISMATCH.");
-            }
-        };
+
 
         document.getElementById('staffLoginForm').onsubmit = (e) => {
             e.preventDefault();
@@ -411,7 +398,7 @@
             const pass = document.getElementById('staffPass').value;
             const staffMember = allStaff.find(s => s.email === email);
 
-            if (staffMember && (pass === staffMember.password || pass === 'RVNP@2026')) {
+            if (staffMember && (pass === staffMember.password || pass === 'rvist@2026')) {
                 showToast(`WELCOME, ${staffMember.name.toUpperCase()}. ACCESS GRANTED.`);
                 localStorage.setItem('rvist_user_role', 'admin');
                 localStorage.setItem('rvist_user_email', email);

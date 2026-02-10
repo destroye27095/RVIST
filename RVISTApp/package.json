@@ -4,7 +4,7 @@
   "description": "Premium School Management System for Rift Valley National Polytechnic (RVNP)",
   "main": "index.html",
   "scripts": {
-    "start": "npx http-server -p 8000 -c-1",
+    "start": "node server/server.js",
     "serve": "python -m http.server 8000",
     "dev": "npx live-server --port=8000",
     "share": "npx localtunnel --port 8000",
@@ -29,7 +29,10 @@
     "http-server": "^14.1.1",
     "live-server": "^1.2.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  },
   "engines": {
     "node": ">=14.0.0"
   }

@@ -355,7 +355,8 @@
 
                 const filtered = students.filter(s => 
                     s.name.toLowerCase().includes(val) ||
-                    s.id.toLowerCase().includes(val) ||
+                    String(s.id).toLowerCase().includes(val) ||
+                    (s.admissionNo && s.admissionNo.toLowerCase().includes(val)) ||
                     s.department?.toLowerCase().includes(val) ||
                     s.course.toLowerCase().includes(val)
                 );
@@ -365,7 +366,7 @@
                         <div class="search-item" onclick="showStudentSummary('${s.id}')">
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <span class="fw-bold text-white">${s.name.toUpperCase()}</span>
-                                <span class="text-accent x-small ls-1" style="font-family: 'Space Mono';">${s.id}</span>
+                                <span class="text-accent x-small ls-1" style="font-family: 'Space Mono';">${s.admissionNo || s.id}</span>
                             </div>
                             <div class="text-muted x-small text-uppercase ls-1">${s.course} | DEPT: ${s.department || 'GEN'}</div>
                         </div>
@@ -385,7 +386,7 @@
         }
 
         function showStudentSummary(id) {
-            const s = students.find(x => x.id === id);
+            const s = students.find(x => String(x.id) === String(id));
             const modal = new bootstrap.Modal(document.getElementById('resultModal'));
             const content = document.getElementById('modalContent');
             const dropdown = document.getElementById('lookupDropdown');

@@ -16,12 +16,9 @@ const STATE = {
     user: null
 };
 
-// API Configuration
 const API_CONFIG = {
-    baseUrl: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-        ? 'http://localhost:5000/api/v1' 
-        : 'https://rvist-backend.onrender.com/api/v1', // Placeholder for deployment
-    useMock: false // Toggle this to force local JSONs
+    baseUrl: 'http://localhost:5000/api/v1', 
+    useMock: false // Backend is now active
 };
 
 // Simulated ACID Transaction Wrapper
