@@ -7,10 +7,6 @@
     {
       "source": "/",
       "destination": "/RVISTApp/index.html"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/$1"
     }
   ]
 }
