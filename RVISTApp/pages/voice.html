@@ -43,7 +43,7 @@
 
         .poll-option:hover {
             background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(212, 175, 55, 0.3);
+            border-color: rgba(0, 255, 204, 0.3);
         }
 
         .vote-bar {
@@ -72,14 +72,24 @@
     <canvas id="networkCanvas"></canvas>
 
     <div class="app-container">
+        <div class="mobile-header">
+            <div class="d-flex align-items-center gap-2">
+                <img src="../assets/rvist-logo.png" alt="Logo" class="mobile-logo">
+                <span class="fw-bold text-accent small">RVIST@2026</span>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Navigation Menu">
+                <i class="ph ph-list"></i>
+            </button>
+        </div>
         <!-- Sidebar -->
         <aside class="sidebar glass-panel">
-            <div class="brand">
-                <h2 class="text-accent">RVIST<span style="color: white; font-weight: 300;">@2026</span></h2>
-                <p class="text-muted" style="font-size: 0.8rem;">Smart Management System</p>
+            <div class="brand text-center">
+                <img src="../assets/rvist-logo.png" alt="RVIST Logo" class="brand-logo-img">
+                <h2 class="text-accent brand-title">RVIST<span class="brand-span">@2026</span></h2>
+                <p class="brand-subtitle-muted">Smart Management System</p>
             </div>
 
-            <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <nav class="nav-container">
                 <a href="../index.html" class="nav-link">
                     <i class="ph ph-squares-four"></i> Dashboard
                 </a>
@@ -100,16 +110,16 @@
                 </a>
             </nav>
 
-            <div style="margin-top: auto;">
+            <div class="logout-link-container">
                 <a href="login.html" class="nav-link text-danger mb-3" 
                     onclick="localStorage.removeItem('rvist_user_role')">
                     <i class="ph ph-sign-out"></i> Log Out
                 </a>
-                <div class="user-profile glass-panel" style="padding: 1rem; display: flex; align-items: center; gap: 1rem;">
-                    <div id="userAvatar" style="width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--bg-dark);">P</div>
+                <div class="user-profile-panel glass-panel">
+                    <div id="userAvatar" class="user-avatar-placeholder">P</div>
                     <div>
-                        <p id="userName" style="font-weight: 600; font-size: 0.9rem; margin: 0;">Principal Office</p>
-                        <p id="userRole" class="text-muted" style="font-size: 0.75rem; margin: 0;">Admin Access</p>
+                        <p id="userName" class="user-name-text">Principal Office</p>
+                        <p id="userRole" class="user-role-text">Admin Access</p>
                     </div>
                 </div>
             </div>
@@ -117,14 +127,14 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <header style="margin-bottom: 4rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 2rem;">
+            <header class="main-header">
                 <div>
-                    <h1 class="text-uppercase" style="letter-spacing: 4px;">Student <span class="text-accent">Voice</span></h1>
-                    <p class="text-muted">Democratic participation, sentiment analysis, and transparent institutional feedback.</p>
+                    <h1 class="header-highlight">Vocal <span class="text-accent">Interface</span></h1>
+                    <p class="text-muted">Biometric voice recognition, command synthesis, and auditory institutional control.</p>
                 </div>
-                <div class="d-flex gap-3 align-items: center;">
-                    <button class="btn glass-panel border-secondary border-opacity-25 px-4"><i class="ph ph-funnel me-1"></i> CATEGORY FILTER</button>
-                    <button class="btn btn-primary px-4 py-2 fw-bold"><i class="ph ph-megaphone me-1"></i> INITIATE POLL</button>
+                <div class="header-actions">
+                    <button class="btn btn-primary px-4 py-2 fw-bold" onclick="toggleListening()" id="micBtn" title="Activate Voice Command"><i class="ph ph-microphone me-1"></i> ACTIVATE MIC</button>
+                    <button class="btn glass-panel text-white px-4 py-2 fw-bold" onclick="showVoiceLog()" title="View Auditory Logs"><i class="ph ph-list-numbers me-1"></i> VOICE LOGS</button>
                 </div>
             </header>
 
@@ -136,9 +146,9 @@
             </div>
 
             <!-- Footer -->
-            <footer class="mt-5 text-center text-muted small" style="border-top: 1px solid rgba(255,255,255,0.05); padding: 2rem 0;">
+            <footer class="footer-container text-center text-muted small">
                 <p class="mb-1">&copy; 2026 RVNP RIFTVALLEY NATIONAL POLYTECHNIC. ALL COPYRIGHTS RESERVED.</p>
-                <p style="font-size: 0.7rem; opacity: 0.6;">ENGINEERED BY: WAMOTO RAPHAEL | MERU UNIVERSITY | SECURE DATA ENGINE</p>
+                <p class="footer-meta">ENGINEERED BY: WAMOTO RAPHAEL | MERU UNIVERSITY | SECURE DATA ENGINE</p>
             </footer>
         </main>
     </div>
@@ -169,7 +179,7 @@
                         const totalVotes = item.votes;
                         return `
                             <div class="col">
-                                <div class="voice-card h-100" style="animation-delay: ${index * 0.1}s">
+                                <div class="voice-card h-100">
                                     <div class="d-flex justify-content-between align-items-start mb-4">
                                         <div>
                                             ${typeBadge}
@@ -210,7 +220,7 @@
                     } else {
                         return `
                             <div class="col">
-                                <div class="voice-card h-100" style="animation-delay: ${index * 0.1}s">
+                                <div class="voice-card h-100">
                                     <div class="d-flex justify-content-between align-items-start mb-4">
                                         <div>
                                             ${typeBadge}

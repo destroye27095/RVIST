@@ -20,11 +20,18 @@
             max-width: 900px;
             margin: 0 auto;
             background: rgba(15, 23, 42, 0.6);
+            -webkit-backdrop-filter: blur(20px);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 32px;
             padding: 3rem;
             box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+        }
+        .onboarding-card {
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+            background: rgba(1, 2, 8, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .step-indicator {
             display: flex;
@@ -60,7 +67,7 @@
             background: var(--accent);
             color: var(--bg-dark);
             border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
         }
         .form-section {
             display: none;
@@ -79,7 +86,7 @@
         .form-control:focus {
             background: rgba(255,255,255,0.08);
             border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.15);
         }
         .label-premium {
             font-size: 0.75rem;
@@ -94,7 +101,7 @@
             height: 120px;
             border-radius: 24px;
             background: rgba(255,255,255,0.05);
-            border: 2px dashed rgba(212, 175, 55, 0.3);
+            border: 2px dashed rgba(0, 255, 204, 0.3);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -104,7 +111,7 @@
             margin: 0 auto 2rem;
         }
         .profile-upload:hover {
-            background: rgba(212, 175, 55, 0.05);
+            background: rgba(0, 255, 204, 0.05);
             border-color: var(--accent);
         }
         @keyframes fadeIn {
@@ -116,9 +123,14 @@
 <body>
 
     <div class="onboarding-container">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold text-accent">Academic Identity Genesis</h2>
-            <p class="text-muted small ls-2 uppercase">Core Profile Initialization Protocol</p>
+        <div class="mobile-header">
+            <div class="d-flex align-items-center gap-2">
+                <img src="../assets/rvist-logo.png" alt="Logo" class="mobile-logo">
+                <span class="fw-bold text-accent small">RVIST@2026</span>
+            </div>
+            <button class="sidebar-toggle" onclick="location.href='../index.html'" title="Return to Dashboard">
+                <i class="ph ph-house"></i>
+            </button>
         </div>
 
         <div class="step-indicator">
@@ -140,39 +152,39 @@
                 <div class="row g-4">
                     <div class="col-md-4">
                         <label class="label-premium">Legal First Name</label>
-                        <input type="text" class="form-control" name="firstName" placeholder="John" required>
+                        <input type="text" class="form-control" name="firstName" placeholder="John" required title="Legal First Name">
                     </div>
                     <div class="col-md-4">
                         <label class="label-premium">Surname (For Email Generation)</label>
-                        <input type="text" class="form-control" name="surname" id="surnameInput" placeholder="Doe" oninput="updateEmailPreview()" required>
+                        <input type="text" class="form-control" name="surname" id="surnameInput" placeholder="Doe" oninput="updateEmailPreview()" required title="Surname">
                     </div>
                     <div class="col-md-4">
                         <label class="label-premium">Contact Phone Number</label>
-                        <input type="tel" class="form-control" name="phone" placeholder="+254 7XX XXX XXX" required>
+                        <input type="tel" class="form-control" name="phone" placeholder="+254 7XX XXX XXX" required title="Contact Phone Number">
                     </div>
                     <div class="col-md-4">
                         <label class="label-premium">Date of Birth</label>
-                        <input type="date" class="form-control" name="dob" id="dobInput" oninput="calculateAge()" required>
+                        <input type="date" class="form-control" name="dob" id="dobInput" oninput="calculateAge()" required title="Date of Birth">
                     </div>
                     <div class="col-md-4">
                         <label class="label-premium">National ID Number</label>
-                        <input type="text" class="form-control" name="nationalId" placeholder="12345678" required>
+                        <input type="text" class="form-control" name="nationalId" placeholder="12345678" required title="National ID Number">
                     </div>
                     <div class="col-md-4">
                         <label class="label-premium">Calculated Age</label>
-                        <input type="text" class="form-control bg-dark border-0" id="ageDisplay" placeholder="---" readonly>
+                        <input type="text" class="form-control bg-dark border-0" id="ageDisplay" placeholder="---" readonly title="Calculated Age">
                     </div>
                     <div class="col-md-4">
                         <label class="label-premium">Hometown</label>
-                        <input type="text" class="form-control" name="hometown" placeholder="Nairobi">
+                        <input type="text" class="form-control" name="hometown" placeholder="Nairobi" title="Hometown">
                     </div>
                     <div class="col-md-4">
                         <label class="label-premium">Tribe (Statistical Ethics)</label>
-                        <input type="text" class="form-control" name="tribe" placeholder="Community Identity">
+                        <input type="text" class="form-control" name="tribe" placeholder="Community Identity" title="Tribe">
                     </div>
                     <div class="col-md-4">
                         <label class="label-premium">Primary Hobby</label>
-                        <input type="text" class="form-control" name="hobby" placeholder="Tech / Art / Sports">
+                        <input type="text" class="form-control" name="hobby" placeholder="Tech / Art / Sports" title="Primary Hobby">
                     </div>
                 </div>
                 <div class="mt-5 d-flex justify-content-end">
@@ -185,12 +197,12 @@
                 <div class="row g-4 mb-4">
                     <div class="col-md-6">
                         <label class="label-premium">Admission Number (if assigned)</label>
-                        <input type="text" class="form-control" name="admissionNo" id="admissionNoInput" placeholder="204764" oninput="updateEmailPreview()">
+                        <input type="text" class="form-control" name="admissionNo" id="admissionNoInput" placeholder="204764" oninput="updateEmailPreview()" title="Admission Number">
                         <p class="x-small text-muted mt-1">If empty, a unique ID will be auto-generated.</p>
                     </div>
                     <div class="col-md-6">
                         <label class="label-premium">Academic Department</label>
-                        <select class="form-select" name="department" required>
+                        <select class="form-select" name="department" required title="Academic Department">
                             <option value="">Select Department</option>
                             <option value="ICT">Computer Science & IT</option>
                             <option value="ENG">Engineering</option>
@@ -201,9 +213,22 @@
                     </div>
                 </div>
 
-                <div class="mt-4 p-4 glass-panel border-accent border-opacity-25 mb-4" style="border-radius: 20px; background: rgba(212, 175, 55, 0.05);">
+                <div class="logout-link-container">
+                <a href="login.html" class="nav-link text-danger mb-3" onclick="localStorage.removeItem('rvist_user_role')">
+                    <i class="ph ph-sign-out"></i> Log Out
+                </a>
+                <div class="user-profile-panel glass-panel">
+                    <div id="userAvatar" class="user-avatar-placeholder">P</div>
+                    <div>
+                        <p id="userName" class="user-name-text">Principal Office</p>
+                        <p id="userRole" class="user-role-text">Admin Access</p>
+                    </div>
+                </div>
+            </div>
+
+                <div class="mt-4 p-4 glass-panel border-accent border-opacity-25 mb-4 br-20 bg-accent-5">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="bg-accent rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <div class="bg-accent rounded-circle d-flex align-items-center justify-content-center w-40px h-40px">
                             <i class="ph ph-envelope-simple text-dark fw-bold"></i>
                         </div>
                         <div>
@@ -216,11 +241,11 @@
                 <div class="row g-4">
                     <div class="col-md-12">
                         <label class="label-premium">Course Enrollment</label>
-                        <input type="text" class="form-control" name="course" placeholder="Diploma in Software Engineering" required>
+                        <input type="text" class="form-control" name="course" placeholder="Diploma in Software Engineering" required title="Course Enrollment">
                     </div>
                     <div class="col-md-6">
                         <label class="label-premium">Current Academic Year</label>
-                        <select class="form-select" name="year">
+                        <select class="form-select" name="year" title="Current Academic Year">
                             <option value="1">Year 1</option>
                             <option value="2">Year 2</option>
                             <option value="3">Year 3</option>
@@ -228,7 +253,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class="label-premium">Current Term / Semester</label>
-                        <select class="form-select" name="term">
+                        <select class="form-select" name="term" title="Current Term / Semester">
                             <option value="1">Term 1</option>
                             <option value="2">Term 2</option>
                             <option value="3">Term 3</option>
@@ -246,19 +271,19 @@
                 <div class="row g-4">
                     <div class="col-md-6">
                         <label class="label-premium">Units Completed (Historical)</label>
-                        <input type="number" class="form-control" name="unitsCovered" placeholder="0">
+                        <input type="number" class="form-control" name="unitsCovered" placeholder="0" title="Units Completed">
                     </div>
                     <div class="col-md-6">
                         <label class="label-premium">Units Remaining (Expected)</label>
-                        <input type="number" class="form-control" name="unitsExpected" placeholder="24">
+                        <input type="number" class="form-control" name="unitsExpected" placeholder="24" title="Units Remaining">
                     </div>
                     <div class="col-md-6">
                         <label class="label-premium">Time Entered Institution</label>
-                        <input type="date" class="form-control" name="entryDate">
+                        <input type="date" class="form-control" name="entryDate" title="Time Entered Institution">
                     </div>
                     <div class="col-md-6">
                         <label class="label-premium">Expected Graduation Date</label>
-                        <input type="date" class="form-control" name="finishDate">
+                        <input type="date" class="form-control" name="finishDate" title="Expected Graduation Date">
                     </div>
                 </div>
                 <div class="mt-5 d-flex justify-content-between">
@@ -276,7 +301,7 @@
                 </div>
                 <div class="mb-4">
                     <label class="label-premium">Establish Security Password</label>
-                    <input type="password" class="form-control" name="password" placeholder="••••••••" required>
+                    <input type="password" class="form-control" name="password" placeholder="••••••••" required title="Security Password">
                 </div>
                 <div class="mt-5 d-flex justify-content-between">
                     <button type="button" class="btn btn-outline-secondary px-5 py-3 rounded-pill fw-bold" onclick="nextStep(3)">BACK</button>

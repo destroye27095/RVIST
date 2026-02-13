@@ -56,11 +56,11 @@ function renderLogs() {
 
     tbody.innerHTML = STATE.logs.map(log => `
         <tr class="log-row">
-            <td class="x-small text-muted" style="font-family: 'Space Mono', monospace;">${log.time}</td>
+            <td class="x-small text-muted font-mono">${log.time}</td>
             <td><span class="fw-bold small text-white-50">${log.user.toUpperCase()}</span></td>
             <td><span class="small">${log.action}</span></td>
             <td>
-                <span class="status-badge ${log.status === 'Success' ? 'status-paid' : 'status-pending'}" style="font-size: 0.6rem; padding: 2px 8px;">
+                <span class="status-badge ${log.status === 'Success' ? 'status-paid' : 'status-pending'} small-badge">
                     ${log.status.toUpperCase()}
                 </span>
             </td>
@@ -192,6 +192,14 @@ function animateValue(obj, start, end, duration) {
         }
     };
     window.requestAnimationFrame(step);
+}
+
+// Toggle Sidebar for Mobile
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) {
+        sidebar.classList.toggle('active');
+    }
 }
 
 // Check Authentication Status

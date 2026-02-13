@@ -54,7 +54,7 @@ function initSystemChart() {
                     mode: 'index', 
                     intersect: false,
                     backgroundColor: 'rgba(0,0,0,0.8)',
-                    titleColor: '#d4af37',
+                    titleColor: '#00ffcc',
                     bodyColor: '#fff'
                 }
             },

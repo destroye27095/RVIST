@@ -35,8 +35,8 @@ class NetworkMesh {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.fillStyle = 'rgba(212, 175, 55, 0.5)';
-        this.ctx.strokeStyle = 'rgba(212, 175, 55, 0.1)';
+        this.ctx.fillStyle = 'rgba(0, 255, 204, 0.5)';
+        this.ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
 
         for (let i = 0; i < this.particles.length; i++) {
             let p = this.particles[i];

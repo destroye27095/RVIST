@@ -27,6 +27,7 @@
             border-right: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             flex-direction: column;
+            -webkit-backdrop-filter: blur(20px);
             backdrop-filter: blur(20px);
         }
         .sidebar-header {
@@ -49,8 +50,8 @@
             gap: 12px;
         }
         .contact-card:hover, .contact-card.active {
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            background: rgba(0, 255, 204, 0.1);
+            border: 1px solid rgba(0, 255, 204, 0.2);
         }
         .avatar {
             width: 48px;
@@ -97,6 +98,12 @@
             color: black;
             border-bottom-right-radius: 4px;
         }
+        .collaboration-panel {
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
         .msg-received {
             align-self: flex-start;
             background: rgba(255, 255, 255, 0.05);
@@ -113,6 +120,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            -webkit-backdrop-filter: blur(20px);
             backdrop-filter: blur(20px);
         }
         .call-actions {
@@ -134,15 +142,56 @@
         }
         .btn-hangup { background: #ef4444; color: white; }
         .btn-mute { background: rgba(255,255,255,0.1); color: white; }
+        @media (max-width: 992px) {
+            .main-wrapper {
+                flex-direction: column;
+                height: auto;
+                overflow: visible;
+            }
+            .sidebar {
+                width: 280px;
+                height: 100vh;
+                position: fixed;
+                left: 0;
+                top: 0;
+                transform: translateX(-100%);
+                transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                z-index: 2000;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .chat-container {
+                height: calc(100vh - 60px);
+                margin-top: 60px;
+            }
+            .main-header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-collaboration">
 
+    <div class="mobile-header">
+        <div class="d-flex align-items-center gap-2">
+            <img src="../assets/rvist-logo.png" alt="Logo" class="mobile-logo">
+            <span class="fw-bold text-accent small">RVIST@2026</span>
+        </div>
+        <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Navigation Menu">
+            <i class="ph ph-list"></i>
+        </button>
+    </div>
+
     <div class="main-wrapper">
         <!-- Sidebar -->
-        <div class="collab-sidebar">
-            <div class="sidebar-header">
-                <h5 class="fw-bold text-accent mb-0">Academic Network</h5>
+        <aside class="sidebar glass-panel">
+            <div class="p-3 border-bottom border-white border-opacity-10 text-center">
+                <img src="../assets/rvist-logo.png" alt="RVIST Logo" class="brand-logo-img">
+                <h2 class="text-accent brand-title">RVIST<span class="brand-span">@2026</span></h2>
+                <p class="brand-subtitle-muted mb-2">Academic Network</p>
                 <span class="x-small text-muted uppercase ls-1">Department: ICT & Computing</span>
             </div>
             <div class="contact-list">
@@ -154,17 +203,29 @@
                     </div>
                 </div>
                 <div class="contact-card">
-                    <div class="avatar" style="background: #3b82f6;">CS</div>
+                    <div class="avatar avatar-blue">CS</div>
                     <div>
                         <h6 class="mb-0 small fw-bold">COMPUTER SCIENCE FORUM</h6>
                         <span class="x-small text-muted">24 Members Active</span>
                     </div>
                 </div>
                 <div class="contact-card">
-                    <div class="avatar" style="background: #10b981;">SM</div>
+                    <div class="avatar avatar-green">SM</div>
                     <div>
                         <h6 class="mb-0 small fw-bold">SARAH MUTUKU</h6>
                         <span class="x-small text-muted">Offline | Peer</span>
+                    </div>
+                </div>
+            </div>
+            <div class="logout-link-container">
+                <a href="login.html" class="nav-link text-danger mb-3" onclick="localStorage.removeItem('rvist_user_role')">
+                    <i class="ph ph-sign-out"></i> Log Out
+                </a>
+                <div class="user-profile-panel glass-panel">
+                    <div id="userAvatar" class="user-avatar-placeholder">P</div>
+                    <div>
+                        <p id="userName" class="user-name-text">Principal Office</p>
+                        <p id="userRole" class="user-role-text">Admin Access</p>
                     </div>
                 </div>
             </div>
@@ -177,15 +238,25 @@
 
         <!-- Chat Area -->
         <div class="chat-container">
+            <header class="main-header">
+                <div>
+                    <h1 class="header-highlight">Academic <span class="text-accent">Nexus</span></h1>
+                    <p class="text-muted">Real-time collaboration, peer-to-peer engineering, and research synchronization.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary px-4 py-2 fw-bold" onclick="createNewRoom()" title="Establish Collaboration Room"><i class="ph ph-users-four me-1"></i> LINK WORKSPACE</button>
+                    <button class="btn glass-panel text-white px-4 py-2 fw-bold" title="View Active Connections"><i class="ph ph-desktop me-1"></i> LIVE NODES</button>
+                </div>
+            </header>
             <div class="chat-header">
                 <div>
                     <h6 class="mb-0 fw-bold">DR. WAMOTO RAPHAEL</h6>
                     <span class="x-small text-muted">Academic Consulting Tunnel Active</span>
                 </div>
                 <div class="d-flex gap-2">
-                    <button class="btn glass-panel text-accent btn-sm px-3" onclick="startCall('audio')"><i class="ph ph-phone"></i></button>
-                    <button class="btn glass-panel text-accent btn-sm px-3" onclick="startCall('video')"><i class="ph ph-video-camera"></i></button>
-                    <button class="btn glass-panel text-muted btn-sm px-3"><i class="ph ph-dots-three-vertical"></i></button>
+                    <button class="btn glass-panel text-accent btn-sm px-3" onclick="startCall('audio')" title="Start Voice Call" aria-label="Start Voice Call"><i class="ph ph-phone"></i></button>
+                    <button class="btn glass-panel text-accent btn-sm px-3" onclick="startCall('video')" title="Start Video Call" aria-label="Start Video Call"><i class="ph ph-video-camera"></i></button>
+                    <button class="btn glass-panel text-muted btn-sm px-3" title="More Options" aria-label="More Options"><i class="ph ph-dots-three-vertical"></i></button>
                 </div>
             </div>
 
@@ -202,9 +273,9 @@
 
             <div class="p-4 border-top border-white border-opacity-10">
                 <div class="d-flex gap-3 align-items-center bg-white bg-opacity-5 p-2 rounded-pill px-4 border border-white border-opacity-10">
-                    <button class="btn border-0 text-muted p-0"><i class="ph ph-paperclip fs-5"></i></button>
-                    <input type="text" class="form-control border-0 bg-transparent py-2 shadow-none" placeholder="Type an academic message...">
-                    <button class="btn btn-accent rounded-circle" style="width: 40px; height: 40px; padding: 0;"><i class="ph ph-paper-plane-right"></i></button>
+                    <button class="btn border-0 text-muted p-0" title="Attach File" aria-label="Attach File"><i class="ph ph-paperclip fs-5"></i></button>
+                    <input type="text" class="form-control border-0 bg-transparent py-2 shadow-none" placeholder="Type an academic message..." title="Message Input">
+                    <button class="btn btn-accent rounded-circle w-40px h-40px p-0" title="Send Message" aria-label="Send Message"><i class="ph ph-paper-plane-right"></i></button>
                 </div>
             </div>
         </div>
@@ -212,7 +283,7 @@
 
     <!-- Call Overlay -->
     <div id="callOverlay">
-        <div class="avatar" style="width: 120px; height: 120px; font-size: 2.5rem; margin-bottom: 2rem; box-shadow: 0 0 50px rgba(212,175,55,0.3);">WD</div>
+        <div class="avatar fs-2_5rem w-120px h-120px mb-4 shadow-gold">WD</div>
         <h4 class="fw-bold">DR. WAMOTO RAPHAEL</h4>
         <p class="text-accent ls-2 animate-pulse" id="callStatus">ACADEMIC UPLINK CONNECTING...</p>
         

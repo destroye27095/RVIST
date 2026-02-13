@@ -52,8 +52,8 @@ class ToastNotification {
         `;
 
         toast.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <i class="ph ${icons[type]}" style="font-size: 1.5rem; color: ${colors[type]}"></i>
+            <div class="d-flex align-items-center gap-3">
+                <i class="ph ${icons[type]} fs-1_5rem" style="color: ${colors[type]}"></i>
                 <span>${message}</span>
             </div>
         `;
@@ -147,15 +147,15 @@ class ModalManager {
 
         modal.innerHTML = `
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content glass-panel" style="background: var(--glass); border: 1px solid rgba(255,255,255,0.1);">
-                    <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <div class="modal-content glass-panel border-white-10">
+                    <div class="modal-header border-bottom-white-10">
                         <h5 class="modal-title">${title}</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         ${content}
                     </div>
-                    <div class="modal-footer" style="border-top: 1px solid rgba(255,255,255,0.1);">
+                    <div class="modal-footer border-top-white-10">
                         ${actionButtons}
                         <button type="button" class="btn glass-panel" data-bs-dismiss="modal">Close</button>
                     </div>

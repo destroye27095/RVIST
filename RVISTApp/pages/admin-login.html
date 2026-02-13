@@ -16,243 +16,41 @@
     <!-- External CSS -->
     <link rel="stylesheet" href="../css/style.css">
 
-    <style>
-        body {
-            background: radial-gradient(circle at top right, #1e3a8a, #0f172a, #020617);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            padding: 20px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.15), transparent 70%);
-            animation: pulseGlow 8s ease-in-out infinite;
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.1); }
-        }
-
-        #networkCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.4;
-        }
-
-        .login-card {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 58, 138, 0.4));
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            border-radius: 32px;
-            padding: 3.5rem 3rem;
-            width: 100%;
-            max-width: 480px;
-            box-shadow: 0 50px 100px -20px rgba(212, 175, 55, 0.4), 0 0 80px rgba(212, 175, 55, 0.2);
-            position: relative;
-            z-index: 10;
-            animation: slideUpFade 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-        }
-
-        .login-card::before {
-            content: '';
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            background: linear-gradient(45deg, 
-                rgba(212, 175, 55, 0.6), 
-                rgba(59, 130, 246, 0.4), 
-                rgba(212, 175, 55, 0.6));
-            border-radius: 32px;
-            z-index: -1;
-            opacity: 0.8;
-            animation: borderGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes borderGlow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.5); }
-        }
-
-        .form-control {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(212, 175, 55, 0.05));
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            border-radius: 14px;
-            color: white !important;
-            padding: 1rem 1.2rem;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            animation: fadeInInput 0.8s ease-out forwards;
-            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .form-control::placeholder {
-            color: rgba(212, 175, 55, 0.6);
-            opacity: 1;
-        }
-
-        .form-control:focus {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(212, 175, 55, 0.1));
-            border-color: rgba(212, 175, 55, 0.8);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4), inset 0 2px 8px rgba(0, 0, 0, 0.3);
-            transform: scale(1.02);
-        }
-
-        @keyframes fadeInInput {
-            from {
-                opacity: 0;
-                background: rgba(255, 255, 255, 0.01);
-            }
-            to {
-                opacity: 1;
-                background: rgba(255, 255, 255, 0.03);
-            }
-        }
-
-        .nav-tabs {
-            border: none;
-            background: rgba(255, 255, 255, 0.04);
-            padding: 6px;
-            border-radius: 16px;
-            margin-bottom: 2.5rem;
-        }
-
-        .nav-tabs .nav-link {
-            border: none;
-            border-radius: 12px;
-            color: rgba(255, 255, 255, 0.5);
-            padding: 0.8rem;
-            transition: all 0.4s;
-            font-weight: 700;
-            font-size: 0.75rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .nav-tabs .nav-link.active {
-            background: var(--accent);
-            color: var(--bg-dark);
-            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
-        }
-
-        .brand-logo {
-            font-size: 4.5rem;
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 0 30px var(--accent-glow));
-            animation: pulse 3s infinite ease-in-out;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-        }
-
-        .input-group-text {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-right: none;
-            color: var(--accent);
-            border-radius: 14px 0 0 14px;
-            padding-left: 1.2rem;
-        }
-
-        .form-control-iconbed {
-            border-left: none !important;
-        }
-
-        .btn-auth {
-            background: linear-gradient(135deg, #d4af37, #f0c14b, #d4af37);
-            color: #020617;
-            border: none;
-            border-radius: 14px;
-            font-weight: 800;
-            letter-spacing: 0.15em;
-            padding: 1.2rem;
-            transition: all 0.4s;
-            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.5), 0 0 30px rgba(212, 175, 55, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-auth::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn-auth:hover::before {
-            left: 100%;
-        }
-
-        .btn-auth:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.7), 0 0 40px rgba(212, 175, 55, 0.5);
-            background: linear-gradient(135deg, #f0c14b, #d4af37, #f0c14b);
-        }
-
-        .text-accent-link {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .text-accent-link:hover {
-            color: white;
-            text-shadow: 0 0 10px var(--accent-glow);
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('../assets/bg-login.png') no-repeat center center;
-            background-size: cover;
-            z-index: -2;
-            opacity: 0.3;
-        }
-    </style>
+<!-- Internal CSS for overrides & animations (Optional) -->
+<style>
+@keyframes pulseGlow {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+}
+@keyframes borderGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.5); }
+}
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+}
+@keyframes fadeInInput {
+    from { opacity: 0; background: rgba(255, 255, 255, 0.01); }
+    to { opacity: 1; background: rgba(255, 255, 255, 0.03); }
+}
+</style>
 </head>
 
-<body>
+<body class="login-body">
     <canvas id="networkCanvas"></canvas>
 
-    <div class="login-card">
+    <div class="login-card login-card-refined">
         <div class="text-center mb-5">
-            <img src="../assets/rvist-logo.png" alt="RVIST Official Logo" style="width: 140px; height: 140px; margin-bottom: 1.5rem; filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.6)); animation: pulse 3s infinite ease-in-out;">
-            <h2 class="fw-bold mb-1" style="letter-spacing: 0.2em; color: white;">RVIST <span class="fw-light">SYSTEMS</span></h2>
-            <p class="text-muted small ls-2 uppercase">Core Enterprise Authentication</p>
-            <p class="text-accent x-small fw-bold ls-1 uppercase" style="font-size: 0.65rem; margin-top: 0.5rem;">Technology for Industrialization</p>
+            <img src="../assets/rvist-logo.png" alt="RVIST Official Logo" class="brand-logo-img w-120px mb-3" title="RVIST Admin Logo">
+            <h2 class="fw-bold mb-1 text-mint ls-2">RVIST <span class="fw-light">SYSTEMS</span></h2>
+            <p class="text-teal small ls-2 uppercase">Core Enterprise Authentication</p>
+            <p class="text-accent x-small fw-bold ls-1 uppercase mt-0_5rem">Technology for Industrialization</p>
         </div>
 
         <div class="text-center mb-4">
             <h4 class="text-accent fw-bold ls-2 uppercase">Staff Command Console</h4>
-            <p class="text-muted small">Administrative Access Only</p>
+            <p class="text-teal small">Administrative Access Only</p>
         </div>
 
         <div class="tab-content">
@@ -262,7 +60,7 @@
                     <div class="row g-3 mb-4">
                         <div class="col-6">
                             <label class="x-small text-muted mb-2 uppercase ls-1">Command Role</label>
-                            <select class="form-control p-3" id="roleSelect">
+                            <select class="form-control p-3" id="roleSelect" title="Select Command Role">
                                 <option value="teacher">Teacher</option>
                                 <option value="hod">Dept Head (HOD)</option>
                                 <option value="deputy">Deputy Principal</option>
@@ -272,7 +70,7 @@
                         </div>
                         <div class="col-6">
                             <label class="x-small text-muted mb-2 uppercase ls-1">Department</label>
-                            <select class="form-control p-3" id="deptSelect">
+                            <select class="form-control p-3" id="deptSelect" title="Select Department">
                                 <option value="ict">ICT & Computing</option>
                                 <option value="agriculture">Applied Sciences</option>
                                 <option value="administration">Admin Core</option>
@@ -281,36 +79,44 @@
                         </div>
                     </div>
                     <div class="mb-4">
-                        <label class="x-small text-muted mb-2 uppercase ls-1">Auto-Resolved Protocol Email</label>
-                        <input type="text" class="form-control text-muted" id="staffEmail" readonly style="background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.03);">
+                        <label class="x-small text-teal mb-2 uppercase ls-1">Auto-Resolved Protocol Email</label>
+                        <input type="text" class="form-control text-teal bg-black-30 border-teal-10" id="staffEmail" readonly title="Auto-Resolved Protocol Email">
                     </div>
                     <div class="mb-4">
-                        <label class="x-small text-muted mb-2 uppercase ls-1">Administrative Password</label>
+                        <label class="x-small text-teal mb-2 uppercase ls-1">Administrative Password</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" id="staffPass" placeholder="Password" required style="border-radius: 14px 0 0 14px;">
-                            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('staffPass', this)" style="border-left: 0; border-radius: 0 14px 14px 0;">
+                            <input type="password" class="form-control border-radius-14px-0-0-14px border-right-0" id="staffPass" placeholder="Password" required>
+                            <button class="btn btn-outline-secondary border-opacity-25 border-left-0 border-radius-0-14px-14px-0" type="button" onclick="togglePassword('staffPass', this)" title="Toggle Password Visibility">
                                 <i class="ph ph-eye" id="staffPass-icon"></i>
                             </button>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-auth w-100 mt-2">ESTABLISH UPLINK</button>
+                    <button type="submit" class="btn btn-ocean w-100 mt-2 py-3">ESTABLISH UPLINK</button>
                     <div class="text-center mt-4">
-                        <a href="javascript:void(0)" onclick="toggleReset()" class="text-accent-link small uppercase ls-1">Forgot Portal Key?</a>
+                        <a href="javascript:void(0)" onclick="toggleReset()" class="text-accent-link small uppercase ls-1 hover-accent">Forgot Portal Key?</a>
                     </div>
                     
-                    <div class="mt-4 text-center border-top border-white border-opacity-10 pt-4 contact-section" style="animation: fadeInUp 1.2s ease-out 0.5s both;">
-                        <p class="x-small text-muted uppercase ls-2 mb-3">Institutional Command Nexus</p>
-                        <div class="glass-panel p-3 mb-2 mx-auto border-white border-opacity-10" style="max-width: 320px; border-radius: 16px;">
-                            <p class="small fw-bold text-white mb-1">P.O. BOX 7182 - 20100</p>
-                            <a href="tel:+254742442161" class="text-accent fw-bold small text-decoration-none d-block mb-3">
+                    <div class="glass-panel p-4 mb-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="user-avatar-placeholder">A</div>
+                            <div>
+                                <p class="user-name-text">ADMINISTRATOR</p>
+                                <p class="user-role-text">System-Level Access</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center border-top border-white border-opacity-10 pt-4 contact-section">
+                        <p class="x-small text-teal uppercase ls-2 mb-3">Institutional Command Nexus</p>
+                        <div class="glass-panel p-3 mb-2 mx-auto contact-nexus-panel max-w-320px">
+                            <p class="small fw-bold text-mint mb-1">P.O. BOX 7182 - 20100</p>
+                            <a href="tel:+254742442161" class="text-accent fw-bold small text-decoration-none d-block mb-3 hover-accent">
                                 <i class="ph ph-phone-call me-1"></i> +254 742 442 161
                             </a>
                             <div class="d-flex justify-content-center gap-3 social-icons">
-                                <a href="https://www.rvnp.ac.ke/" target="_blank" title="Website" class="social-link" style="color: #d4af37;"><i class="ph ph-globe fs-5"></i></a>
-                                <a href="https://www.facebook.com/RvistNakuru" target="_blank" title="Facebook" class="social-link" style="color: #1877f2;"><i class="ph ph-facebook-logo fs-5"></i></a>
-                                <a href="https://www.instagram.com/RVNP%20Nakuru" target="_blank" title="Instagram" class="social-link" style="color: #e4405f;"><i class="ph ph-instagram-logo fs-5"></i></a>
-                                <a href="https://www.tiktok.com/@rvnp_official" target="_blank" title="TikTok" class="social-link" style="color: #00f2ea;"><i class="ph ph-tiktok-logo fs-5"></i></a>
-                                <a href="mailto:principal@rvnp.ac.ke" title="Email" class="social-link" style="color: #ea4335;"><i class="ph ph-envelope fs-5"></i></a>
+                                <a href="https://www.facebook.com/RvistNakuru" target="_blank" rel="noopener" title="Facebook" class="social-link social-fb"><i class="ph ph-facebook-logo fs-5"></i></a>
+                                <a href="https://www.instagram.com/RVNP%20Nakuru" target="_blank" rel="noopener" title="Instagram" class="social-link social-ig"><i class="ph ph-instagram-logo fs-5"></i></a>
+                                <a href="https://www.tiktok.com/@rvnp_official" target="_blank" rel="noopener" title="TikTok" class="social-link social-tk"><i class="ph ph-tiktok-logo fs-5"></i></a>
+                                <a href="mailto:principal@rvnp.ac.ke" title="Email" class="social-link social-ml"><i class="ph ph-envelope fs-5"></i></a>
                             </div>
                         </div>
                     </div>
@@ -320,7 +126,7 @@
         
 
         <!-- Reset Password Section -->
-        <div id="resetSection" style="display: none;" class="mt-4 pt-4 border-top border-secondary border-opacity-10">
+        <div id="resetSection" class="mt-4 pt-4 border-top border-secondary border-opacity-10 d-none">
             <h6 class="text-accent x-small fw-bold mb-3 uppercase ls-2">Institutional Reset Protocol</h6>
             <div class="mb-3">
                 <label class="x-small text-muted mb-2 uppercase">Root Security Passkey</label>
@@ -335,8 +141,8 @@
     </div>
 
     <!-- Toast -->
-    <div class="position-fixed bottom-0 end-0 p-4" style="z-index: 1000">
-        <div id="loginToast" class="toast glass-panel bg-dark" role="alert" style="border-left: 4px solid var(--accent); border-radius: 12px;">
+    <div class="position-fixed bottom-0 end-0 p-4 z-1000">
+        <div id="loginToast" class="toast glass-panel bg-dark border-left-accent br-12" role="alert">
             <div class="toast-body p-3 text-white small fw-bold" id="toastMessage">
                 SYSTEM MESSAGE: Authenticating...
             </div>

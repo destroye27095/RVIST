@@ -21,13 +21,13 @@
         }
 
         .msg-template:hover {
-            background: rgba(212, 175, 55, 0.05);
+            background: rgba(0, 255, 204, 0.05);
             border-left-color: var(--accent);
             transform: translateX(5px);
         }
 
         .msg-template.active {
-            background: rgba(212, 175, 55, 0.1);
+            background: rgba(0, 255, 204, 0.1);
             border-left-color: var(--accent);
             border-left-width: 6px;
         }
@@ -75,6 +75,10 @@
             background: var(--accent);
             border-radius: 10px;
         }
+
+        #dispatchBar {
+            width: 0%;
+        }
     </style>
 </head>
 
@@ -82,14 +86,24 @@
     <canvas id="networkCanvas"></canvas>
 
     <div class="app-container">
+        <div class="mobile-header">
+            <div class="d-flex align-items-center gap-2">
+                <img src="../assets/rvist-logo.png" alt="Logo" class="mobile-logo">
+                <span class="fw-bold text-accent small">RVIST@2026</span>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Navigation Menu">
+                <i class="ph ph-list"></i>
+            </button>
+        </div>
         <!-- Sidebar -->
         <aside class="sidebar glass-panel">
-            <div class="brand">
-                <h2 class="text-accent">RVIST<span style="color: white; font-weight: 300;">@2026</span></h2>
-                <p class="text-muted" style="font-size: 0.8rem;">Smart Management System</p>
+            <div class="brand text-center">
+                <img src="../assets/rvist-logo.png" alt="RVIST Logo" class="brand-logo-img">
+                <h2 class="text-accent brand-title">RVIST<span class="brand-span">@2026</span></h2>
+                <p class="brand-subtitle-muted">Smart Management System</p>
             </div>
 
-            <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <nav class="nav-container">
                 <a href="../index.html" class="nav-link">
                     <i class="ph ph-squares-four"></i> Dashboard
                 </a>
@@ -110,32 +124,38 @@
                 </a>
             </nav>
 
-            <div style="margin-top: auto;">
+            <div class="logout-link-container">
                 <a href="login.html" class="nav-link text-danger mb-3" 
                     onclick="localStorage.removeItem('rvist_user_role')">
                     <i class="ph ph-sign-out"></i> Log Out
                 </a>
-                <div class="user-profile glass-panel" style="padding: 1rem; display: flex; align-items: center; gap: 1rem;">
-                    <div id="userAvatar" style="width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--bg-dark);">P</div>
+                <div class="user-profile-panel glass-panel">
+                    <div id="userAvatar" class="user-avatar-placeholder">P</div>
                     <div>
-                        <p id="userName" style="font-weight: 600; font-size: 0.9rem; margin: 0;">Principal Office</p>
-                        <p id="userRole" class="text-muted" style="font-size: 0.75rem; margin: 0;">Admin Access</p>
+                        <p id="userName" class="user-name-text">Principal Office</p>
+                        <p id="userRole" class="user-role-text">Admin Access</p>
                     </div>
                 </div>
             </div>
         </aside>
 
         <main class="main-content">
-            <header class="mb-5">
-                <h1 class="text-uppercase" style="letter-spacing: 4px;">Bulk Automated <span class="text-accent">Dispatch</span></h1>
-                <p class="text-muted">Broadcast official institution communications with one-click automation.</p>
+            <header class="main-header">
+                <div>
+                    <h1 class="header-highlight">Registrar <span class="text-accent">Comms</span></h1>
+                    <p class="text-muted">Official correspondence, document verification, and institutional mailing nexus.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary px-4 py-2 fw-bold" onclick="showNewMailModal()" title="Draft Official Correspondence"><i class="ph ph-plus-circle me-1"></i> DRAFT CORRESPONDENCE</button>
+                    <button class="btn glass-panel text-white px-4 py-2 fw-bold" title="Institutional Archive Access"><i class="ph ph-archive me-1"></i> VIEW ARCHIVE</button>
+                </div>
             </header>
 
             <div class="row g-4">
                 <!-- Template Selector -->
                 <div class="col-lg-4">
                     <section class="glass-panel p-4 h-100">
-                        <h5 class="mb-4 text-accent text-uppercase small" style="letter-spacing: 2px;">1. Select Messaging Template</h5>
+                        <h5 class="mb-4 text-accent text-uppercase small ls-2">1. Select Messaging Template</h5>
                         <div class="d-flex flex-column gap-3">
                             <div class="msg-template glass-panel p-3 active" data-type="fees">
                                 <h6 class="mb-1 fw-bold">Fee Balance Reminder</h6>
@@ -155,10 +175,10 @@
                             </div>
                         </div>
 
-                        <h5 class="mt-5 mb-4 text-accent text-uppercase small" style="letter-spacing: 2px;">2. Broadcast Targeting</h5>
+                        <h5 class="mt-5 mb-4 text-accent text-uppercase small ls-2">2. Broadcast Targeting</h5>
                         <div class="glass-panel p-4">
                             <label class="small text-muted mb-2 text-uppercase fw-bold">Filtering Criteria</label>
-                            <select class="form-select bg-dark border-secondary text-white mb-4" id="filterType" style="border-radius: 8px;">
+                            <select class="form-select bg-dark border-secondary text-white mb-4 br-8" id="filterType" title="Select Targeting Criteria">
                                 <option value="all">Broadcast to All Students</option>
                                 <option value="arrears">Students with Arrears (>0)</option>
                                 <option value="cleared">Cleared Students (Status: Active)</option>
@@ -169,7 +189,7 @@
                                     <p class="mb-0 small text-muted">TARGET SIZE</p>
                                     <h4 class="mb-0 text-accent" id="targetCount">0</h4>
                                 </div>
-                                <button class="btn btn-primary px-4 py-2" onclick="prepareBatch()">
+                                <button class="btn btn-primary px-4 py-2" onclick="prepareBatch()" title="Prepare Broadcast">
                                     <i class="ph ph-magic-wand me-1"></i> PREPARE
                                 </button>
                             </div>
@@ -179,17 +199,17 @@
 
                 <!-- Email Preview & Dispatch -->
                 <div class="col-lg-8">
-                    <section class="glass-panel p-4 overflow-hidden" style="min-height: 100%;">
+                    <section class="glass-panel p-4 overflow-hidden min-h-100">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="text-accent mb-0 text-uppercase small" style="letter-spacing: 2px;">Official Broadcast Preview</h5>
-                            <button class="btn btn-success px-4 py-2 fw-bold" id="dispatchBtn" disabled onclick="simulateDispatch()">
+                            <h5 class="text-accent mb-0 text-uppercase small ls-2">Official Broadcast Preview</h5>
+                            <button class="btn btn-success px-4 py-2 fw-bold" id="dispatchBtn" disabled onclick="simulateDispatch()" title="Initiate Dispatch">
                                 <i class="ph ph-paper-plane-tilt me-1"></i> INITIATE DISPATCH
                             </button>
                         </div>
 
                         <div class="email-preview" id="emailContent">
                             <div class="text-center text-muted mt-5 py-5">
-                                <i class="ph ph-envelope-open" style="font-size: 5rem; opacity: 0.1; color: var(--accent);"></i>
+                                <i class="ph ph-envelope-open fs-5rem opacity-10 text-accent"></i>
                                 <h5 class="mt-4 fw-light">SELECT A TEMPLATE TO PREVIEW</h5>
                                 <p class="small">The preview will show how the email appears to the recipient.</p>
                             </div>
@@ -201,8 +221,8 @@
                                 <h6 class="text-accent mb-0 small text-uppercase fw-bold">Live Transmission Log</h6>
                                 <span id="transmission-stat" class="small text-muted">0% Complete</span>
                             </div>
-                            <div class="progress mb-3" style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px;">
-                                <div id="dispatchBar" class="progress-bar bg-success progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+                            <div class="progress mb-3 h-6px bg-white-5 br-10">
+                                <div id="dispatchBar" class="progress-bar bg-success progress-bar-striped progress-bar-animated"></div>
                             </div>
                             <div id="batchLog" class="dispatch-log-container p-2">
                                 <!-- Log items -->
@@ -213,11 +233,9 @@
             </div>
 
             <!-- Footer -->
-            <footer class="mt-5 text-center text-muted small" style="border-top: 1px solid rgba(255,255,255,0.05); padding: 2rem 0;">
+            <footer class="footer-container text-center text-muted small">
                 <p class="mb-1">&copy; 2026 RVNP RIFTVALLEY NATIONAL POLYTECHNIC. ALL COPYRIGHTS RESERVED.</p>
-                <div style="opacity: 0.6; font-size: 0.7rem;">
-                    <p class="mb-0">SECURE DISPATCH ENGINE v2.1.0 | AUTHENTICATED ACCESS</p>
-                </div>
+                <p class="footer-meta">ENGINEERED BY: WAMOTO RAPHAEL | MERU UNIVERSITY | SECURE DATA ENGINE</p>
             </footer>
         </main>
     </div>
@@ -233,24 +251,22 @@
             fees: {
                 subject: "URGENT: Fee Balance Status Notification",
                 body: (s) => `
-                    <div style="font-family: sans-serif; color: #333;">
-                        <div style="text-align: center; margin-bottom: 2rem;">
-                            <h2 style="color: #0f172a; margin-bottom: 5px;">RIFTVALLEY NATIONAL POLYTECHNIC</h2>
-                            <p style="color: #d4af37; font-weight: bold; margin-top: 0;">OFFICE OF THE REGISTRAR</p>
+                    <div class="dispatch-log-container-preview">
+                        <div class="dispatch-header">
+                            <h2 class="dispatch-title">RIFTVALLEY NATIONAL POLYTECHNIC</h2>
+                            <p class="dispatch-subtitle">OFFICE OF THE REGISTRAR</p>
                         </div>
                         <p>Date: ${new Date().toLocaleDateString()}</p>
                         <p>Dear <strong>${s.name}</strong> (Adm No: ${s.id}),</p>
                         <p>This is an automated notification regarding your fee status for the current academic session.</p>
-                        <div style="background: #f8fafc; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border: 1px solid #e2e8f0;">
-                            <p style="margin: 5px 0;"><strong>Primary Email:</strong> ${s.email}</p>
-                            <p style="margin: 5px 0;"><strong>Total Tuition Required:</strong> KES ${s.feeTotal.toLocaleString()}</p>
-                            <p style="margin: 5px 0;"><strong>Total Paid:</strong> KES ${s.feePaid.toLocaleString()}</p>
-                            <hr style="border: 0.5px solid #e2e8f0;">
-                            <p style="margin: 5px 0; color: #ef4444; font-size: 1.2rem;"><strong>Outstanding Balance: KES ${s.feeBalance.toLocaleString()}</strong></p>
+                        <div class="dispatch-body-panel">
+                            <p class="mb-1"><strong>Primary Email:</strong> ${s.email}</p>
+                            <p class="mb-1"><strong>Total Tuition Required:</strong> KES ${s.feeTotal.toLocaleString()}</p>
+                            <p class="mb-1"><strong>Total Paid:</strong> KES ${s.feePaid.toLocaleString()}</p>
+                            <hr class="border-white-10">
+                            <p class="mb-1 text-danger fs-5"><strong>Outstanding Balance: KES ${s.feeBalance.toLocaleString()}</strong></p>
                         </div>
                         <p>Please note that according to institutional policy, your access to <strong>Examination Results</strong> and <strong>Admission Cards</strong> will remain restricted until the full balance is cleared.</p>
-                        <p>Payments should be made to our official Paybill <strong>880123</strong>.</p>
-                        <br>
                         <p>Regards,</p>
                         <p><strong>Registrar (Automated Dispatch)</strong></p>
                     </div>
@@ -259,16 +275,16 @@
             exam: {
                 subject: "Notice: Academic Examination Timetable Dispatch",
                 body: (s) => `
-                    <div style="font-family: sans-serif; color: #333;">
-                        <h2 style="color: #0f172a;">EXAMINATION ADMISSION - ${s.department}</h2>
+                    <div class="dispatch-log-container-preview">
+                        <h2 class="dispatch-title">EXAMINATION ADMISSION - ${s.department}</h2>
                         <p>Dear ${s.name},</p>
                         <p>Your examination admission card has been processed. Below is your verified schedule:</p>
-                        <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
-                            <tr style="background: #f1f5f9;"><th style="padding: 10px; text-align: left;">Date</th><th style="padding: 10px; text-align: left;">Unit</th><th style="padding: 10px; text-align: left;">Venue</th></tr>
-                            <tr><td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">2026-02-10</td><td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${s.course} Core</td><td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">Academic Block A</td></tr>
+                        <table class="dispatch-table">
+                            <tr class="dispatch-table-header"><th class="dispatch-table-cell">Date</th><th class="dispatch-table-cell">Unit</th><th class="dispatch-table-cell">Venue</th></tr>
+                            <tr><td class="dispatch-table-cell">2026-02-10</td><td class="dispatch-table-cell">${s.course} Core</td><td class="dispatch-table-cell">Academic Block A</td></tr>
                         </table>
-                        <div style="padding: 1rem; border-radius: 8px; background: #fffbeb; border: 1px solid #fde68a;">
-                            <p style="margin:0; font-size: 0.9rem; color: #92400e;"><strong>Note:</strong> Admission cards will only be active upon clearance of any fee balances.</p>
+                        <div class="dispatch-note-box">
+                            <p class="dispatch-note-text"><strong>Note:</strong> Admission cards will only be active upon clearance of any fee balances.</p>
                         </div>
                     </div>
                 `
@@ -276,15 +292,15 @@
             results: {
                 subject: "Official Notice: Semester Results Release",
                 body: (s) => `
-                    <div style="font-family: sans-serif; color: #333;">
-                        <div style="background: #0f172a; color: white; padding: 1rem; text-align: center; border-radius: 8px 8px 0 0;">
-                            <h3 style="margin: 0;">ACADEMIC PERFORMANCE REPORT</h3>
+                    <div class="dispatch-log-container-preview">
+                        <div class="dispatch-dark-banner">
+                            <h3 class="dispatch-dark-banner-title">ACADEMIC PERFORMANCE REPORT</h3>
                         </div>
-                        <div style="padding: 1.5rem; border: 1px solid #e2e8f0; border-top: 0;">
+                        <div class="dispatch-border-panel">
                             <p>Dear ${s.name},</p>
                             <p>Academic results for the current session have been officially uploaded to your student portal.</p>
                             <p>Grade Summary: <strong>B+ (Average)</strong></p>
-                            <a href="#" style="display: inline-block; background: #d4af37; color: #000; padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 5px; margin-top: 1rem;">View Full Transcript</a>
+                            <a href="#" class="btn-ocean py-2 px-4 d-inline-block text-decoration-none">View Full Transcript</a>
                         </div>
                     </div>
                 `
@@ -295,21 +311,21 @@
                     const wingCount = stdList.filter(x => x.course === s.course).length;
                     const deptCount = stdList.filter(x => x.department === s.department).length;
                     return `
-                    <div style="font-family: sans-serif; color: #333;">
-                        <div style="background: #10b981; color: white; padding: 1rem; border-radius: 8px; text-align: center; margin-bottom: 1.5rem;">
-                            <h3 style="margin: 0;">OFFICIAL PAYMENT RECEIPT</h3>
+                    <div class="dispatch-log-container-preview">
+                        <div class="dispatch-success-banner">
+                            <h3 class="dispatch-dark-banner-title">OFFICIAL PAYMENT RECEIPT</h3>
                         </div>
                         <p>We have successfully received your fee payment.</p>
-                        <div style="background: #f1f5f9; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
-                            <p><strong>Amount:</strong> KES ${s.feePaid.toLocaleString()}</p>
-                            <p><strong>Transaction ID:</strong> RVNP-TXN-${Math.floor(Math.random()*100000)}</p>
+                        <div class="dispatch-table-panel">
+                            <p class="mb-1"><strong>Amount:</strong> KES ${s.feePaid.toLocaleString()}</p>
+                            <p class="mb-1"><strong>Transaction ID:</strong> RVNP-TXN-${Math.floor(Math.random()*100000)}</p>
                         </div>
-                        <div style="border: 1px dashed #cbd5e1; padding: 1rem; border-radius: 8px;">
-                            <h4 style="margin-top: 0; color: #0f172a;">Institutional Statistics (Wing Info):</h4>
-                            <p style="margin-bottom: 5px;">Students in your Course (${s.course}): <strong>${wingCount}</strong></p>
-                            <p style="margin-top: 0;">Students in your Dept (${s.department}): <strong>${deptCount}</strong></p>
+                        <div class="dispatch-note-box-dashed">
+                            <h4 class="dispatch-title-sm">Institutional Statistics (Wing Info):</h4>
+                            <p class="mb-1">Students in your Course (${s.course}): <strong>${wingCount}</strong></p>
+                            <p class="mb-0">Students in your Dept (${s.department}): <strong>${deptCount}</strong></p>
                         </div>
-                        <p style="font-size: 0.8rem; margin-top: 2rem; color: #64748b;">This is a system-generated receipt. No signature required.</p>
+                        <p class="dispatch-footer-text">This is a system-generated receipt. No signature required.</p>
                     </div>
                     `;
                 }
@@ -367,13 +383,13 @@
             const tpl = templates[selectedTemplate] || templates.fees;
             
             preview.innerHTML = `
-                <div style="width: 100%;">
-                    <div style="border-bottom: 1px solid #f1f5f9; padding-bottom: 1.5rem; margin-bottom: 2rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                            <h4 style="margin:0; color: #0f172a; font-weight: 700;">${tpl.subject}</h4>
-                            <span style="font-size: 10px; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; color: #475569;">PREVIEW MODE</span>
+                <div class="w-100">
+                    <div class="dispatch-preview-header">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h4 class="dispatch-preview-title">${tpl.subject}</h4>
+                            <span class="preview-mode-tag">PREVIEW MODE</span>
                         </div>
-                        <p style="margin: 10px 0 0; font-size: 0.85rem; color: #64748b;">
+                        <p class="dispatch-preview-meta">
                             <strong>From:</strong> Rift Valley National Polytechnic <br>
                             <strong>To:</strong> ${student.name} <${student.email}>
                         </p>

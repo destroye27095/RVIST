@@ -25,6 +25,7 @@
             max-height: 400px;
             overflow-y: auto;
             display: none;
+            -webkit-backdrop-filter: blur(20px);
             backdrop-filter: blur(20px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
@@ -37,7 +38,7 @@
         }
 
         .search-item:hover {
-            background: rgba(212, 175, 55, 0.1);
+            background: rgba(0, 255, 204, 0.1);
             padding-left: 1.5rem;
         }
 
@@ -90,14 +91,24 @@
     <canvas id="networkCanvas"></canvas>
 
     <div class="app-container">
+        <div class="mobile-header">
+            <div class="d-flex align-items-center gap-2">
+                <img src="../assets/rvist-logo.png" alt="Logo" class="mobile-logo">
+                <span class="fw-bold text-accent small">RVIST@2026</span>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Navigation Menu">
+                <i class="ph ph-list"></i>
+            </button>
+        </div>
         <!-- Sidebar -->
         <aside class="sidebar glass-panel">
-            <div class="brand">
-                <h2 class="text-accent">RVIST<span style="color: white; font-weight: 300;">@2026</span></h2>
-                <p class="text-muted" style="font-size: 0.8rem;">Smart Management System</p>
+            <div class="brand text-center">
+                <img src="../assets/rvist-logo.png" alt="RVIST Logo" class="brand-logo-img">
+                <h2 class="text-accent brand-title">RVIST<span class="brand-span">@2026</span></h2>
+                <p class="brand-subtitle-muted">Smart Management System</p>
             </div>
 
-            <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <nav class="nav-container">
                 <a href="../index.html" class="nav-link">
                     <i class="ph ph-squares-four"></i> Dashboard
                 </a>
@@ -118,41 +129,36 @@
                 </a>
             </nav>
 
-            <div style="margin-top: auto;">
-                <a href="login.html" class="nav-link text-danger mb-3" 
-                    onclick="localStorage.removeItem('rvist_user_role')">
+            <div class="logout-link-container">
+                <a href="login.html" class="nav-link text-danger mb-3" onclick="localStorage.removeItem('rvist_user_role')">
                     <i class="ph ph-sign-out"></i> Log Out
                 </a>
-                <div class="user-profile glass-panel" style="padding: 1rem; display: flex; align-items: center; gap: 1rem;">
-                    <div id="userAvatar" style="width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--bg-dark);">P</div>
+                <div class="user-profile-panel glass-panel">
+                    <div id="userAvatar" class="user-avatar-placeholder">P</div>
                     <div>
-                        <p id="userName" style="font-weight: 600; font-size: 0.9rem; margin: 0;">Principal Office</p>
-                        <p id="userRole" class="text-muted" style="font-size: 0.75rem; margin: 0;">Admin Access</p>
+                        <p id="userName" class="user-name-text">Principal Office</p>
+                        <p id="userRole" class="user-role-text">Admin Access</p>
                     </div>
                 </div>
             </div>
         </aside>
 
         <main class="main-content">
-            <header class="mb-5">
-                <div class="row align-items-end g-4">
-                    <div class="col-lg-6">
-                        <h1 class="text-uppercase" style="letter-spacing: 4px;">Results & <span class="text-accent">Moderation</span></h1>
-                        <p class="text-muted">Academic grading, cross-departmental analysis, and global student lookup.</p>
+            <header class="main-header">
+                <div>
+                    <h1 class="header-highlight">Academic <span class="text-accent">Marking</span></h1>
+                    <p class="text-muted">High-precision score entry, transcript generation, and performance curve analysis.</p>
+                </div>
+                <div class="header-actions">
+                    <div class="search-pill px-4 py-2 d-flex align-items-center gap-3">
+                        <i class="ph ph-users-three text-accent"></i>
+                        <input type="text" id="globalLookup" class="search-input-clean" 
+                            placeholder="Search student by Name, ID, or Multi-Attribute..." title="Global Student Lookup">
                     </div>
-                    <div class="col-lg-6">
-                        <div class="position-relative">
-                            <div class="glass-panel p-3 d-flex align-items-center gap-3" style="border-radius: 12px; border-color: rgba(212, 175, 55, 0.3);">
-                                <i class="ph ph-users-three text-accent" style="font-size: 1.5rem;"></i>
-                                <input type="text" id="globalLookup" class="w-100 bg-transparent border-0 text-white outline-none" 
-                                    placeholder="Search student by Name, ID, or Multi-Attribute..." style="outline: none; font-size: 1rem;">
-                                <kbd class="bg-dark border border-secondary text-muted small px-2">ALT+S</kbd>
-                            </div>
-                            <div id="lookupDropdown" class="search-results-dropdown"></div>
-                        </div>
-                    </div>
+                    <button class="btn btn-primary px-4 py-2 fw-bold" title="Generate Academic Stats"><i class="ph ph-chart-line-up me-1"></i> ANALYZE CURVE</button>
                 </div>
             </header>
+            <div id="lookupDropdown" class="search-results-dropdown"></div>
 
             <div class="row g-4">
                 <!-- Exam Moderation & Marking -->
@@ -170,7 +176,7 @@
                             </div>
                         </div>
 
-                        <div class="table-responsive">
+                        <div class="data-table-container">
                             <table class="data-table marking-table">
                                 <thead>
                                     <tr>
@@ -188,7 +194,7 @@
                             </table>
                         </div>
 
-                        <div id="analysisResult" class="mt-4 p-4 glass-panel d-none" style="background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.3);">
+                        <div id="analysisResult" class="mt-4 p-4 glass-panel d-none border-success-5">
                             <div class="d-flex align-items-center gap-3 mb-3">
                                 <div class="bg-success bg-opacity-20 p-2 rounded">
                                     <i class="ph ph-trend-up text-success h4 mb-0"></i>
@@ -242,11 +248,11 @@
                                     <span class="text-muted x-small ls-1">MARKING PROGRESS</span>
                                     <span class="fw-bold text-accent small">84%</span>
                                 </div>
-                                <div class="progress" style="height: 4px; background: rgba(255,255,255,0.05);">
-                                    <div class="progress-bar bg-accent" style="width: 84%"></div>
+                                <div class="progress h-4px bg-white-5">
+                                    <div class="progress-bar bg-accent w-84pct"></div>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between p-3 glass-panel" style="background: rgba(16, 185, 129, 0.05);">
+                            <div class="d-flex align-items-center justify-content-between p-3 glass-panel bg-success-5">
                                 <div>
                                     <p class="mb-0 x-small text-muted ls-1">SYSTEM STATUS</p>
                                     <p class="mb-0 fw-bold text-success small">ENCRYPTED & VERIFIED</p>
@@ -257,13 +263,17 @@
                     </section>
                 </div>
             </div>
+            <footer class="footer-container text-center text-muted small">
+                <p class="mb-1">&copy; 2026 RVNP RIFTVALLEY NATIONAL POLYTECHNIC. ALL COPYRIGHTS RESERVED.</p>
+                <p class="footer-meta">ENGINEERED BY: WAMOTO RAPHAEL | MERU UNIVERSITY | SECURE DATA ENGINE</p>
+            </footer>
         </main>
     </div>
 
     <!-- Student Result/Info Modal -->
     <div class="modal fade" id="resultModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content glass-panel" style="background: rgba(15, 23, 42, 0.98); border: 1px solid rgba(212, 175, 55, 0.5);">
+            <div class="modal-content glass-panel modal-glass-content">
                 <div class="modal-body p-5">
                     <div class="text-center mb-5 border-bottom border-secondary border-opacity-25 pb-4">
                         <h2 class="text-accent fw-bold text-uppercase ls-2 mb-1">RiftValley National Polytechnic</h2>
@@ -275,7 +285,7 @@
                     </div>
 
                     <div class="mt-5 text-center d-print-none pt-4 border-top border-secondary border-opacity-10">
-                        <button class="btn btn-outline-secondary px-4 me-2" data-bs-dismiss="modal">CLOSE RESOURCE</button>
+                        <button class="btn btn-outline-secondary px-4 me-2" data-bs-dismiss="modal" title="Close Resource" aria-label="Close Resource">CLOSE RESOURCE</button>
                         <button class="btn btn-primary px-4" onclick="window.print()">
                             <i class="ph ph-printer me-2"></i> EXPORT TO PDF
                         </button>
@@ -318,17 +328,17 @@
                 const grade = total >= 80 ? 'A' : total >= 70 ? 'B' : total >= 60 ? 'C' : 'D';
                 
                 return `
-                    <tr class="fade-in-words" style="animation-delay: ${index * 0.05}s">
+                    <tr class="fade-in-words">
                         <td class="ps-2">
                             <div class="fw-bold text-white small">${s.name.toUpperCase()}</div>
                             <div class="text-muted x-small ls-1">${s.id}</div>
                         </td>
                         <td><span class="text-muted small">${s.course.split(' ')[0]}</span></td>
-                        <td class="text-center"><input type="number" value="${cat}" onchange="updateRow(this)"></td>
-                        <td class="text-center"><input type="number" value="${exam}" onchange="updateRow(this)"></td>
+                        <td class="text-center"><input type="number" value="${cat}" onchange="updateRow(this)" title="CAT Score"></td>
+                        <td class="text-center"><input type="number" value="${exam}" onchange="updateRow(this)" title="Exam Score"></td>
                         <td class="text-center fw-bold total-val text-accent">${total}</td>
                         <td class="text-center grade-val">
-                            <span class="perf-badge" style="background:${getGradeColor(grade)}">${grade}</span>
+                            <span class="perf-badge grade-badge-${grade.toLowerCase()}">${grade}</span>
                         </td>
                     </tr>
                 `;
@@ -336,10 +346,7 @@
         }
 
         function getGradeColor(g) {
-            return g === 'A' ? 'rgba(16, 185, 129, 0.2); color: #10b981;' : 
-                   g === 'B' ? 'rgba(59, 130, 246, 0.2); color: #3b82f6;' : 
-                   g === 'C' ? 'rgba(212, 175, 55, 0.2); color: var(--accent);' : 
-                   'rgba(239, 68, 68, 0.2); color: #ef4444;';
+            return `grade-badge-${g.toLowerCase()}`;
         }
 
         function setupLookup() {
@@ -366,7 +373,7 @@
                         <div class="search-item" onclick="showStudentSummary('${s.id}')">
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <span class="fw-bold text-white">${s.name.toUpperCase()}</span>
-                                <span class="text-accent x-small ls-1" style="font-family: 'Space Mono';">${s.admissionNo || s.id}</span>
+                                <span class="text-accent x-small ls-1 font-mono">${s.admissionNo || s.id}</span>
                             </div>
                             <div class="text-muted x-small text-uppercase ls-1">${s.course} | DEPT: ${s.department || 'GEN'}</div>
                         </div>
@@ -397,7 +404,7 @@
             content.innerHTML = `
                 <div class="row g-4 mb-5">
                     <div class="col-md-6">
-                        <div class="glass-panel p-4" style="height: 100%;">
+                        <div class="glass-panel p-4 h-100">
                             <h6 class="text-accent text-uppercase small ls-2 mb-4">Core Attributes</h6>
                             <div class="d-flex flex-column gap-2 mb-0">
                                 <div class="d-flex justify-content-between x-small"><span class="text-muted">FULL NAME:</span> <span class="fw-bold">${s.name.toUpperCase()}</span></div>
@@ -408,7 +415,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="glass-panel p-4 ${hasBalance ? 'border-danger' : 'border-success'}" style="height: 100%;">
+                        <div class="glass-panel p-4 ${hasBalance ? 'border-danger' : 'border-success'} h-100">
                             <h6 class="text-accent text-uppercase small ls-2 mb-4">Financial Health</h6>
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <span class="x-small text-muted">SETTLEMENT STATUS</span>
@@ -432,7 +439,7 @@
                     <h6 class="text-accent text-uppercase small ls-2 mb-4">Academic Moderation Summary</h6>
                     ${hasBalance ? `
                         <div class="alert alert-danger border-0 bg-danger bg-opacity-10 p-5 text-center">
-                            <i class="ph ph-lock-key" style="font-size: 3rem; display: block; margin-bottom: 1rem;"></i>
+                            <i class="ph ph-lock-key fs-3rem d-block mb-3"></i>
                             <h5 class="fw-bold">RECORDS TEMPORARILY SEALED</h5>
                             <p class="small mb-0">Academic data for ${s.id} is currently restricted due to a residual financial balance of KES ${s.feeBalance.toLocaleString()}.</p>
                         </div>
@@ -446,7 +453,7 @@
                                     <tr>
                                         <td class="small fw-bold">${unit.toUpperCase()}</td>
                                         <td class="text-center fw-bold text-white">${mark}</td>
-                                        <td class="text-center"><span class="perf-badge" style="background:${getGradeColor(mark >= 80 ? 'A' : 'B')}">${mark >= 80 ? 'A' : 'B'}</span></td>
+                                        <td class="text-center"><span class="perf-badge ${getGradeColor(mark >= 80 ? 'A' : 'B')}">${mark >= 80 ? 'A' : 'B'}</span></td>
                                     </tr>
                                 `).join('')}
                             </tbody>
@@ -470,9 +477,7 @@
             
             // Success Feedback
             const toast = document.createElement('div');
-            toast.className = 'glass-panel position-fixed bottom-0 end-0 m-4 p-3 border-success';
-            toast.style.zIndex = '9999';
-            toast.style.borderColor = 'rgba(16, 185, 129, 0.5)';
+            toast.className = 'glass-panel position-fixed bottom-0 end-0 m-4 p-3 border-success-5 zi-9999 br-30';
             toast.innerHTML = `<i class="ph ph-chart-line text-success me-2"></i> Performance Synchronization Complete`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
@@ -501,7 +506,7 @@
             tr.querySelector('.total-val').innerText = total;
             
             const grade = total >= 80 ? 'A' : total >= 70 ? 'B' : total >= 60 ? 'C' : 'D';
-            tr.querySelector('.grade-val').innerHTML = `<span class="perf-badge" style="background:${getGradeColor(grade)}">${grade}</span>`;
+            tr.querySelector('.grade-val').innerHTML = `<span class="perf-badge ${getGradeColor(grade)}">${grade}</span>`;
         }
 
         init();

@@ -33,10 +33,11 @@
             pointer-events: none;
             border: 2px solid var(--accent);
             border-radius: 20px;
-            box-shadow: 0 0 40px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 0 40px rgba(0, 255, 204, 0.15);
         }
         .status-card {
             background: rgba(15, 23, 42, 0.8);
+            -webkit-backdrop-filter: blur(20px);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255,255,255,0.05);
             border-radius: 24px;
@@ -44,7 +45,7 @@
             margin-top: 2rem;
         }
         .timer-badge {
-            background: rgba(212, 175, 55, 0.1);
+            background: rgba(0, 255, 204, 0.08);
             color: var(--accent);
             padding: 8px 16px;
             border-radius: 12px;
@@ -56,22 +57,28 @@
             animation: pulse-gold 2s infinite;
         }
         @keyframes pulse-gold {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
-            70% { transform: scale(1.02); box-shadow: 0 0 10px 10px rgba(212, 175, 55, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.4); }
+            70% { transform: scale(1.02); box-shadow: 0 0 10px 10px rgba(0, 255, 204, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 204, 0); }
         }
     </style>
 </head>
 <body class="bg-attendance">
-    <div class="container py-5">
-        <div class="text-center mb-5">
-            <h2 class="text-accent fw-bold ls-2 uppercase">Quantum QR Scanner</h2>
-            <p class="text-muted small ls-1">Institutional Attendance Verification Protocol</p>
+    <div class="mobile-header">
+        <div class="d-flex align-items-center gap-2">
+            <img src="../assets/rvist-logo.png" alt="Logo" class="mobile-logo">
+            <span class="fw-bold text-accent small">RVIST@2026</span>
         </div>
+        <button class="sidebar-toggle" onclick="location.href='../index.html'" title="Return to Dashboard">
+            <i class="ph ph-house"></i>
+        </button>
+    </div>
+
+    <div class="container py-5 mt-5">
 
         <div class="scanner-container">
             <div id="reader"></div>
-            <div id="scanResult" class="status-card text-center" style="display: none;">
+            <div id="scanResult" class="status-card text-center d-none">
                 <div id="resultIcon" class="mb-3"></div>
                 <h4 id="resultTitle">VERIFYING...</h4>
                 <p id="resultMessage" class="text-muted small mb-4"></p>
@@ -148,7 +155,7 @@
             const details = document.getElementById('resultDetails');
 
             if (type === 'success') {
-                icon.innerHTML = '<i class="ph ph-check-circle text-success" style="font-size: 4rem;"></i>';
+                icon.innerHTML = '<i class="ph ph-check-circle text-success fs-4rem"></i>';
                 title.innerText = 'ACCESS GRANTED';
                 title.className = 'text-success fw-bold';
                 msg.innerText = message;
@@ -159,7 +166,7 @@
                     <p class="mb-0 text-white">${data.unitName}</p>
                 `;
             } else {
-                icon.innerHTML = '<i class="ph ph-warning-circle text-danger" style="font-size: 4rem;"></i>';
+                icon.innerHTML = '<i class="ph ph-warning-circle text-danger fs-4rem"></i>';
                 title.innerText = 'ACCESS DENIED';
                 title.className = 'text-danger fw-bold';
                 msg.innerText = message;
