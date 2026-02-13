@@ -3,17 +3,14 @@
   "name": "rvist-erp",
   "cleanUrls": true,
   "trailingSlash": false,
-  "redirects": [
+  "rewrites": [
     {
       "source": "/",
-      "destination": "/RVISTApp/index.html",
-      "permanent": true
-    }
-  ],
-  "routes": [
+      "destination": "/RVISTApp/index.html"
+    },
     {
-      "src": "/RVISTApp/(.*)",
-      "dest": "/RVISTApp/$1"
+      "source": "/(.*)",
+      "destination": "/$1"
     }
   ]
 }
