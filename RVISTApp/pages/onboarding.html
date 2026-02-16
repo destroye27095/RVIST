@@ -163,8 +163,16 @@
                         <input type="tel" class="form-control" name="phone" placeholder="+254 7XX XXX XXX" required title="Contact Phone Number">
                     </div>
                     <div class="col-md-4">
-                        <label class="label-premium">Date of Birth</label>
                         <input type="date" class="form-control" name="dob" id="dobInput" oninput="calculateAge()" required title="Date of Birth">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="label-premium">Gender Identity</label>
+                        <select class="form-select" name="gender" required title="Gender Identity">
+                            <option value="">Select Gender...</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                            <option value="O">Other / Prefer not to say</option>
+                        </select>
                     </div>
                     <div class="col-md-4">
                         <label class="label-premium">National ID Number</label>
@@ -175,12 +183,75 @@
                         <input type="text" class="form-control bg-dark border-0" id="ageDisplay" placeholder="---" readonly title="Calculated Age">
                     </div>
                     <div class="col-md-4">
-                        <label class="label-premium">Hometown</label>
-                        <input type="text" class="form-control" name="hometown" placeholder="Nairobi" title="Hometown">
+                        <label class="label-premium">Home County</label>
+                        <select class="form-select" name="hometown" title="Home County">
+                            <option value="">Select County...</option>
+                            <option value="Mombasa">Mombasa</option>
+                            <option value="Kwale">Kwale</option>
+                            <option value="Kilifi">Kilifi</option>
+                            <option value="Tana River">Tana River</option>
+                            <option value="Lamu">Lamu</option>
+                            <option value="Taita Taveta">Taita Taveta</option>
+                            <option value="Garissa">Garissa</option>
+                            <option value="Wajir">Wajir</option>
+                            <option value="Mandera">Mandera</option>
+                            <option value="Marsabit">Marsabit</option>
+                            <option value="Isiolo">Isiolo</option>
+                            <option value="Meru">Meru</option>
+                            <option value="Tharaka Nithi">Tharaka Nithi</option>
+                            <option value="Embu">Embu</option>
+                            <option value="Kitui">Kitui</option>
+                            <option value="Machakos">Machakos</option>
+                            <option value="Makueni">Makueni</option>
+                            <option value="Nyandarua">Nyandarua</option>
+                            <option value="Nyeri">Nyeri</option>
+                            <option value="Kirinyaga">Kirinyaga</option>
+                            <option value="Murang'a">Murang'a</option>
+                            <option value="Kiambu">Kiambu</option>
+                            <option value="Turkana">Turkana</option>
+                            <option value="West Pokot">West Pokot</option>
+                            <option value="Samburu">Samburu</option>
+                            <option value="Trans Nzoia">Trans Nzoia</option>
+                            <option value="Uasin Gishu">Uasin Gishu</option>
+                            <option value="Elgeyo Marakwet">Elgeyo Marakwet</option>
+                            <option value="Nandi">Nandi</option>
+                            <option value="Baringo">Baringo</option>
+                            <option value="Laikipia">Laikipia</option>
+                            <option value="Nakuru">Nakuru</option>
+                            <option value="Narok">Narok</option>
+                            <option value="Kajiado">Kajiado</option>
+                            <option value="Kericho">Kericho</option>
+                            <option value="Bomet">Bomet</option>
+                            <option value="Kakamega">Kakamega</option>
+                            <option value="Vihiga">Vihiga</option>
+                            <option value="Bungoma">Bungoma</option>
+                            <option value="Busia">Busia</option>
+                            <option value="Siaya">Siaya</option>
+                            <option value="Kisumu">Kisumu</option>
+                            <option value="Homa Bay">Homa Bay</option>
+                            <option value="Migori">Migori</option>
+                            <option value="Kisii">Kisii</option>
+                            <option value="Nyamira">Nyamira</option>
+                            <option value="Nairobi">Nairobi</option>
+                        </select>
                     </div>
                     <div class="col-md-4">
-                        <label class="label-premium">Tribe (Statistical Ethics)</label>
-                        <input type="text" class="form-control" name="tribe" placeholder="Community Identity" title="Tribe">
+                        <label class="label-premium">Community / Tribe</label>
+                        <select class="form-select" name="tribe" title="Community / Tribe">
+                             <option value="">Select Community...</option>
+                             <option value="Kikuyu">Kikuyu</option>
+                             <option value="Luhya">Luhya</option>
+                             <option value="Kalenjin">Kalenjin</option>
+                             <option value="Luo">Luo</option>
+                             <option value="Kamba">Kamba</option>
+                             <option value="Somali">Somali</option>
+                             <option value="Kisii">Kisii</option>
+                             <option value="Mijikenda">Mijikenda</option>
+                             <option value="Meru">Meru</option>
+                             <option value="Maasai">Maasai</option>
+                             <option value="Turkana">Turkana</option>
+                             <option value="Other">Other</option>
+                        </select>
                     </div>
                     <div class="col-md-4">
                         <label class="label-premium">Primary Hobby</label>
@@ -257,6 +328,25 @@
                             <option value="1">Term 1</option>
                             <option value="2">Term 2</option>
                             <option value="3">Term 3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row g-4 mt-2">
+                    <div class="col-md-6">
+                        <label class="label-premium">Mode of Study</label>
+                        <select class="form-select" name="studyMode" title="Mode of Study">
+                            <option value="FULL_TIME">Full Time (Regular)</option>
+                            <option value="PART_TIME">Part Time / Evening</option>
+                            <option value="VIRTUAL">Virtual / Online Learning</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="label-premium">Sponsorship Type</label>
+                        <select class="form-select" name="sponsorship" title="Sponsorship Type">
+                            <option value="GOK">Government Sponsored (KUCCPS)</option>
+                            <option value="SELF">Self Sponsored (Private)</option>
+                            <option value="CDF">CDF / Bursary</option>
+                            <option value="NGO">NGO Organization</option>
                         </select>
                     </div>
                 </div>
