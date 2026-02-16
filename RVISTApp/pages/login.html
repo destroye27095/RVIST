@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RVIST@2026 | Secure Gateway</title>
 
 <!-- External Fonts -->
@@ -30,13 +30,34 @@
     0%,100%{transform:scale(1); opacity:1;}
     50%{transform:scale(1.05); opacity:0.85;}
 }
+.security-scanner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    animation: scan 2s infinite linear;
+    z-index: 20;
+    opacity: 0.5;
+    pointer-events: none;
+    border-top-left-radius: 32px;
+    border-top-right-radius: 32px;
+}
+@keyframes scan {
+    0% { top: 0; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+}
 </style>
 </head>
 
 <body class="login-body">
 <canvas id="networkCanvas"></canvas>
 
-<div class="login-card login-card-refined">
+<div class="login-card login-card-refined overflow-hidden">
+    <div class="security-scanner"></div>
     <div class="text-center mb-4">
         <img src="../assets/rvist-logo.png" alt="RVIST Logo" class="brand-logo-img mb-3" title="RVIST Institutional Logo">
         <h2 class="fw-bold text-mint">RVIST <span class="fw-light">SYSTEMS</span></h2>

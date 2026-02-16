@@ -391,7 +391,11 @@
                 </div>
                 <div class="mb-4">
                     <label class="label-premium">Establish Security Password</label>
-                    <input type="password" class="form-control" name="password" placeholder="••••••••" required title="Security Password">
+                    <input type="password" class="form-control" name="password" id="newPassword" placeholder="••••••••" required title="Security Password" oninput="checkStrength(this.value)">
+                    <div class="progress mt-2" style="height: 4px;">
+                        <div class="progress-bar transition-width" id="strengthBar" role="progressbar" style="width: 0%"></div>
+                    </div>
+                    <p class="x-small text-muted mt-1 mb-0" id="strengthText">Security Strength: ANALYZING...</p>
                 </div>
                 <div class="mt-5 d-flex justify-content-between">
                     <button type="button" class="btn btn-outline-secondary px-5 py-3 rounded-pill fw-bold" onclick="nextStep(3)">BACK</button>
@@ -452,6 +456,33 @@
             
             window.location.href = 'students.html';
         };
+
+        function checkStrength(password) {
+            const bar = document.getElementById('strengthBar');
+            const text = document.getElementById('strengthText');
+            let strength = 0;
+            if (password.length > 5) strength++;
+            if (password.length > 8) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+            const colors = ['var(--danger)', '#ff4444', '#ffbb33', '#00C851', 'var(--accent)'];
+            const labels = ['WEAK', 'UNSTABLE', 'MODERATE', 'STRONG', 'SECURE'];
+            const widths = ['20%', '40%', '60%', '80%', '100%'];
+            
+            if (password.length > 0) {
+                const idx = Math.min(strength, 4);
+                bar.style.width = widths[idx];
+                bar.style.backgroundColor = colors[idx];
+                text.innerText = `Security Strength: ${labels[idx]}`;
+                text.style.color = colors[idx];
+            } else {
+                bar.style.width = '0%';
+                text.innerText = 'Security Strength: ANALYZING...';
+                text.style.color = '#6c757d';
+            }
+        }
     </script>
 </body>
 </html>
