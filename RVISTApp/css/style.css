@@ -501,6 +501,8 @@ h4, h5, h6 {
 .dispatch-dark-banner-title { margin: 0; }
 .dispatch-border-panel { padding: 1.5rem; border: 1px solid #e2e8f0; border-top: 0; }
 
+.h-4px { height: 4px !important; }
+
 /* Layout Refinements */
 .w-120px { width: 120px !important; }
 .w-150px { width: 150px !important; }
